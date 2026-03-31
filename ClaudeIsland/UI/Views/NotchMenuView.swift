@@ -468,6 +468,7 @@ struct MenuRow: View {
             )
         }
         .buttonStyle(.plain)
+        .contentShape(Rectangle())
         .onHover { isHovered = $0 }
     }
 
@@ -517,6 +518,7 @@ struct MenuToggleRow: View {
             )
         }
         .buttonStyle(.plain)
+        .contentShape(Rectangle())
         .onHover { isHovered = $0 }
     }
 
