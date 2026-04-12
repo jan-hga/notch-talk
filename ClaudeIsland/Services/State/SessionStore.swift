@@ -513,7 +513,7 @@ actor SessionStore {
                     switch block {
                     case .toolUse(let tool):
                         validIds.insert(tool.id)
-                    case .text, .thinking, .interrupted:
+                    case .text, .thinking, .image, .interrupted:
                         let itemId = "\(message.id)-\(block.typePrefix)-\(blockIndex)"
                         validIds.insert(itemId)
                     }
@@ -625,6 +625,7 @@ actor SessionStore {
         session.toolTracker.lastSyncTime = Date()
 
         await populateSubagentToolsFromAgentFiles(
+            sessionId: payload.sessionId,
             session: &session,
             cwd: payload.cwd,
             structuredResults: payload.structuredResults
@@ -641,15 +642,17 @@ actor SessionStore {
         )
     }
 
-    /// Populate subagent tools for Task tools using their agent JSONL files
+    /// Populate subagent tools for Task/Agent tools using their agent JSONL files
     private func populateSubagentToolsFromAgentFiles(
+        sessionId: String,
         session: inout SessionState,
         cwd: String,
         structuredResults: [String: ToolResultData]
     ) async {
         for i in 0..<session.chatItems.count {
             guard case .toolCall(var tool) = session.chatItems[i].type,
-                  tool.name == "Task",
+                  // "Task" is the legacy name; Claude Code now uses "Agent"
+                  tool.name == "Task" || tool.name == "Agent",
                   let structuredResult = structuredResults[session.chatItems[i].id],
                   case .task(let taskResult) = structuredResult,
                   !taskResult.agentId.isEmpty else { continue }
@@ -664,6 +667,7 @@ actor SessionStore {
             }
 
             let subagentToolInfos = await ConversationParser.shared.parseSubagentTools(
+                sessionId: sessionId,
                 agentId: taskResult.agentId,
                 cwd: cwd
             )
@@ -731,6 +735,12 @@ actor SessionStore {
             let itemId = "\(message.id)-text-\(blockIndex)"
             guard !existingIds.contains(itemId) else { return nil }
 
+            // Skip empty text blocks — assistant turns with only tool calls
+            // produce empty text blocks that would render as orphan dots/gaps.
+            guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                return nil
+            }
+
             if message.role == .user {
                 return ChatHistoryItem(id: itemId, type: .user(text), timestamp: message.timestamp)
             } else {
@@ -772,6 +782,11 @@ actor SessionStore {
             let itemId = "\(message.id)-thinking-\(blockIndex)"
             guard !existingIds.contains(itemId) else { return nil }
             return ChatHistoryItem(id: itemId, type: .thinking(text), timestamp: message.timestamp)
+
+        case .image(let imageBlock):
+            let itemId = "\(message.id)-image-\(blockIndex)"
+            guard !existingIds.contains(itemId) else { return nil }
+            return ChatHistoryItem(id: itemId, type: .image(imageBlock), timestamp: message.timestamp)
 
         case .interrupted:
             let itemId = "\(message.id)-interrupted-\(blockIndex)"

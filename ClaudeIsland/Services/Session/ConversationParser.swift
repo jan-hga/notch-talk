@@ -275,7 +275,8 @@ actor ConversationParser {
             if let pattern = input["pattern"] as? String {
                 return pattern
             }
-        case "Task":
+        case "Task", "Agent":
+            // "Task" is the legacy name; Claude Code now uses "Agent"
             if let description = input["description"] as? String {
                 return description
             }
@@ -512,6 +513,12 @@ actor ConversationParser {
         return ClaudePaths.projectsDir.path + "/" + projectDir + "/" + sessionId + ".jsonl"
     }
 
+    /// Build subagent JSONL file path. Claude Code nests subagent JSONL files
+    /// under the parent session directory: projects/<project>/<sessionId>/subagents/agent-<agentId>.jsonl
+    nonisolated static func subagentFilePath(sessionId: String, agentId: String, projectDir: String) -> String {
+        return ClaudePaths.projectsDir.path + "/" + projectDir + "/" + sessionId + "/subagents/agent-" + agentId + ".jsonl"
+    }
+
     private func parseMessageLine(_ json: [String: Any], seenToolIds: inout Set<String>, toolIdToName: inout [String: String]) -> ChatMessage? {
         guard let type = json["type"] as? String,
               let uuid = json["uuid"] as? String else {
@@ -576,6 +583,13 @@ actor ConversationParser {
                     case "thinking":
                         if let thinking = block["thinking"] as? String {
                             blocks.append(.thinking(thinking))
+                        }
+                    case "image":
+                        // Claude Code stores inline images as base64 with media_type.
+                        if let source = block["source"] as? [String: Any],
+                           let mediaType = source["media_type"] as? String,
+                           let data = source["data"] as? String {
+                            blocks.append(.image(ImageBlock(mediaType: mediaType, base64Data: data)))
                         }
                     default:
                         break
@@ -931,11 +945,11 @@ actor ConversationParser {
     // MARK: - Subagent Tools Parsing
 
     /// Parse subagent tools from an agent JSONL file
-    func parseSubagentTools(agentId: String, cwd: String) -> [SubagentToolInfo] {
+    func parseSubagentTools(sessionId: String, agentId: String, cwd: String) -> [SubagentToolInfo] {
         guard !agentId.isEmpty else { return [] }
 
         let projectDir = cwd.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ".", with: "-")
-        let agentFile = ClaudePaths.projectsDir.path + "/" + projectDir + "/agent-" + agentId + ".jsonl"
+        let agentFile = Self.subagentFilePath(sessionId: sessionId, agentId: agentId, projectDir: projectDir)
 
         guard FileManager.default.fileExists(atPath: agentFile),
               let content = try? String(contentsOfFile: agentFile, encoding: .utf8) else {
@@ -1023,11 +1037,11 @@ struct SubagentToolInfo: Sendable {
 
 extension ConversationParser {
     /// Parse subagent tools from an agent JSONL file (static, synchronous version)
-    nonisolated static func parseSubagentToolsSync(agentId: String, cwd: String) -> [SubagentToolInfo] {
+    nonisolated static func parseSubagentToolsSync(sessionId: String, agentId: String, cwd: String) -> [SubagentToolInfo] {
         guard !agentId.isEmpty else { return [] }
 
         let projectDir = cwd.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ".", with: "-")
-        let agentFile = ClaudePaths.projectsDir.path + "/" + projectDir + "/agent-" + agentId + ".jsonl"
+        let agentFile = subagentFilePath(sessionId: sessionId, agentId: agentId, projectDir: projectDir)
 
         guard FileManager.default.fileExists(atPath: agentFile),
               let content = try? String(contentsOfFile: agentFile, encoding: .utf8) else {
