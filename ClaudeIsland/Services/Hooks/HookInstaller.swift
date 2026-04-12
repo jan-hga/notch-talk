@@ -56,13 +56,26 @@ struct HookInstaller {
             ("UserPromptSubmit", withoutMatcher),
             ("PreToolUse", withMatcher),
             ("PostToolUse", withMatcher),
+            // PostToolUseFailure fires when a tool errored or was interrupted — we
+            // currently miss these signals entirely (v2.0.x+)
+            ("PostToolUseFailure", withMatcher),
             ("PermissionRequest", withMatcherAndTimeout),
+            // PermissionDenied surfaces auto-mode classifier denials (v2.1.88+)
+            ("PermissionDenied", withMatcher),
             ("Notification", withMatcher),
             ("Stop", withoutMatcher),
+            // StopFailure fires on API errors (rate limit, auth, billing) — lets
+            // us show the failure in the notch instead of appearing stuck (v2.1.78+)
+            ("StopFailure", withoutMatcher),
+            // SubagentStart pairs with existing SubagentStop (v2.0.43+)
+            ("SubagentStart", withoutMatcher),
             ("SubagentStop", withoutMatcher),
             ("SessionStart", withoutMatcher),
             ("SessionEnd", withoutMatcher),
             ("PreCompact", preCompactConfig),
+            // PostCompact pairs with PreCompact so the UI can exit the
+            // .compacting phase cleanly (v2.1.76+)
+            ("PostCompact", preCompactConfig),
         ]
 
         for (event, config) in hookEvents {
