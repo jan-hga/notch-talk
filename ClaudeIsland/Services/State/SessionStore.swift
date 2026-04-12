@@ -195,7 +195,7 @@ actor SessionStore {
 
                 // Skip creating top-level placeholder for subagent tools
                 // They'll appear under their parent Task instead
-                let isSubagentTool = session.subagentState.hasActiveSubagent && toolName != "Task" && toolName != "Agent"
+                let isSubagentTool = session.subagentState.hasActiveSubagent && !ToolCallItem.isSubagentContainerName(toolName)
                 if isSubagentTool {
                     return
                 }
@@ -260,7 +260,7 @@ actor SessionStore {
     private func processSubagentTracking(event: HookEvent, session: inout SessionState) {
         switch event.event {
         case "PreToolUse":
-            if (event.tool == "Task" || event.tool == "Agent"), let toolUseId = event.toolUseId {
+            if ToolCallItem.isSubagentContainerName(event.tool), let toolUseId = event.toolUseId {
                 let description = event.toolInput?["description"]?.value as? String
                 session.subagentState.startTask(taskToolId: toolUseId, description: description)
                 Self.logger.debug("Started Task/Agent subagent tracking: \(toolUseId.prefix(12), privacy: .public)")
@@ -294,7 +294,7 @@ actor SessionStore {
             }
 
         case "PostToolUse":
-            if event.tool == "Task" || event.tool == "Agent" {
+            if ToolCallItem.isSubagentContainerName(event.tool) {
                 Self.logger.debug("PostToolUse for Task/Agent received (subagent still running)")
             } else if let toolUseId = event.toolUseId,
                       session.subagentState.hasActiveSubagent {
@@ -704,8 +704,7 @@ actor SessionStore {
     ) async {
         for i in 0..<session.chatItems.count {
             guard case .toolCall(var tool) = session.chatItems[i].type,
-                  // "Task" is the legacy name; Claude Code now uses "Agent"
-                  tool.name == "Task" || tool.name == "Agent",
+                  tool.isSubagentContainer,
                   let structuredResult = structuredResults[session.chatItems[i].id],
                   case .task(let taskResult) = structuredResult,
                   !taskResult.agentId.isEmpty else { continue }
