@@ -534,8 +534,55 @@ struct MessageItemView: View {
             ToolCallView(tool: tool, sessionId: sessionId)
         case .thinking(let text):
             ThinkingView(text: text)
+        case .image(let block):
+            ImageMessageView(image: block)
         case .interrupted:
             InterruptedMessageView()
+        }
+    }
+}
+
+// MARK: - Image Message
+
+struct ImageMessageView: View {
+    let image: ImageBlock
+
+    /// Decode the base64 payload once per view instance.
+    private var nsImage: NSImage? {
+        guard let data = Data(base64Encoded: image.base64Data) else { return nil }
+        return NSImage(data: data)
+    }
+
+    var body: some View {
+        HStack {
+            Spacer(minLength: 60)
+
+            if let nsImage {
+                Image(nsImage: nsImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: 280, maxHeight: 280)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    )
+            } else {
+                // Decode failed — show a labelled placeholder rather than silently dropping
+                HStack(spacing: 6) {
+                    Image(systemName: "photo")
+                        .font(.system(size: 12))
+                    Text("Image (\(image.mediaType))")
+                        .font(.system(size: 12))
+                }
+                .foregroundColor(.white.opacity(0.5))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.white.opacity(0.08))
+                )
+            }
         }
     }
 }
