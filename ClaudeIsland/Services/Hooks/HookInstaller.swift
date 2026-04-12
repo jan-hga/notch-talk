@@ -11,11 +11,8 @@ struct HookInstaller {
 
     /// Install hook script and update settings.json on app launch
     static func installIfNeeded() {
-        let claudeDir = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent(".claude")
-        let hooksDir = claudeDir.appendingPathComponent("hooks")
+        let hooksDir = ClaudePaths.hooksDir
         let pythonScript = hooksDir.appendingPathComponent("claude-island-state.py")
-        let settings = claudeDir.appendingPathComponent("settings.json")
 
         try? FileManager.default.createDirectory(
             at: hooksDir,
@@ -31,7 +28,7 @@ struct HookInstaller {
             )
         }
 
-        updateSettings(at: settings)
+        updateSettings(at: ClaudePaths.settingsFile)
     }
 
     private static func updateSettings(at settingsURL: URL) {
@@ -42,7 +39,7 @@ struct HookInstaller {
         }
 
         let python = detectPython()
-        let command = "\(python) ~/.claude/hooks/claude-island-state.py"
+        let command = "\(python) \(ClaudePaths.hookScriptShellPath)"
         let hookEntry: [[String: Any]] = [["type": "command", "command": command]]
         let hookEntryWithTimeout: [[String: Any]] = [["type": "command", "command": command, "timeout": 86400]]
         let withMatcher: [[String: Any]] = [["matcher": "*", "hooks": hookEntry]]
@@ -59,33 +56,32 @@ struct HookInstaller {
             ("UserPromptSubmit", withoutMatcher),
             ("PreToolUse", withMatcher),
             ("PostToolUse", withMatcher),
+            // PostToolUseFailure fires when a tool errored or was interrupted — we
+            // currently miss these signals entirely (v2.0.x+)
+            ("PostToolUseFailure", withMatcher),
             ("PermissionRequest", withMatcherAndTimeout),
+            // PermissionDenied surfaces auto-mode classifier denials (v2.1.88+)
+            ("PermissionDenied", withMatcher),
             ("Notification", withMatcher),
             ("Stop", withoutMatcher),
+            // StopFailure fires on API errors (rate limit, auth, billing) — lets
+            // us show the failure in the notch instead of appearing stuck (v2.1.78+)
+            ("StopFailure", withoutMatcher),
+            // SubagentStart pairs with existing SubagentStop (v2.0.43+)
+            ("SubagentStart", withoutMatcher),
             ("SubagentStop", withoutMatcher),
             ("SessionStart", withoutMatcher),
             ("SessionEnd", withoutMatcher),
             ("PreCompact", preCompactConfig),
+            // PostCompact pairs with PreCompact so the UI can exit the
+            // .compacting phase cleanly (v2.1.76+)
+            ("PostCompact", preCompactConfig),
         ]
 
         for (event, config) in hookEvents {
-            if var existingEvent = hooks[event] as? [[String: Any]] {
-                let hasOurHook = existingEvent.contains { entry in
-                    if let entryHooks = entry["hooks"] as? [[String: Any]] {
-                        return entryHooks.contains { h in
-                            let cmd = h["command"] as? String ?? ""
-                            return cmd.contains("claude-island-state.py")
-                        }
-                    }
-                    return false
-                }
-                if !hasOurHook {
-                    existingEvent.append(contentsOf: config)
-                    hooks[event] = existingEvent
-                }
-            } else {
-                hooks[event] = config
-            }
+            let existingEvent = hooks[event] as? [[String: Any]] ?? []
+            let cleanedEvent = existingEvent.compactMap { removingClaudeIslandHooks(from: $0) }
+            hooks[event] = cleanedEvent + config
         }
 
         json["hooks"] = hooks
@@ -100,9 +96,7 @@ struct HookInstaller {
 
     /// Check if hooks are currently installed
     static func isInstalled() -> Bool {
-        let claudeDir = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent(".claude")
-        let settings = claudeDir.appendingPathComponent("settings.json")
+        let settings = ClaudePaths.settingsFile
 
         guard let data = try? Data(contentsOf: settings),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -129,11 +123,9 @@ struct HookInstaller {
 
     /// Uninstall hooks from settings.json and remove script
     static func uninstall() {
-        let claudeDir = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent(".claude")
-        let hooksDir = claudeDir.appendingPathComponent("hooks")
+        let hooksDir = ClaudePaths.hooksDir
         let pythonScript = hooksDir.appendingPathComponent("claude-island-state.py")
-        let settings = claudeDir.appendingPathComponent("settings.json")
+        let settings = ClaudePaths.settingsFile
 
         try? FileManager.default.removeItem(at: pythonScript)
 
@@ -145,15 +137,7 @@ struct HookInstaller {
 
         for (event, value) in hooks {
             if var entries = value as? [[String: Any]] {
-                entries.removeAll { entry in
-                    if let entryHooks = entry["hooks"] as? [[String: Any]] {
-                        return entryHooks.contains { hook in
-                            let cmd = hook["command"] as? String ?? ""
-                            return cmd.contains("claude-island-state.py")
-                        }
-                    }
-                    return false
-                }
+                entries = entries.compactMap { removingClaudeIslandHooks(from: $0) }
 
                 if entries.isEmpty {
                     hooks.removeValue(forKey: event)
@@ -193,5 +177,23 @@ struct HookInstaller {
         } catch {}
 
         return "python"
+    }
+
+    nonisolated private static func removingClaudeIslandHooks(from entry: [String: Any]) -> [String: Any]? {
+        guard var entryHooks = entry["hooks"] as? [[String: Any]] else {
+            return entry
+        }
+
+        entryHooks.removeAll(where: isClaudeIslandHook)
+        guard !entryHooks.isEmpty else { return nil }
+
+        var updatedEntry = entry
+        updatedEntry["hooks"] = entryHooks
+        return updatedEntry
+    }
+
+    nonisolated private static func isClaudeIslandHook(_ hook: [String: Any]) -> Bool {
+        let cmd = hook["command"] as? String ?? ""
+        return cmd.contains("claude-island-state.py")
     }
 }
