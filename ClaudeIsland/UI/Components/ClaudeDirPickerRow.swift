@@ -2,9 +2,9 @@
 //  ClaudeDirPickerRow.swift
 //  ClaudeIsland
 //
-//  Settings row that lets users pick a custom Claude config directory via
-//  the native macOS folder picker. Defaults to auto-detection (CLAUDE_CONFIG_DIR,
-//  ~/.config/claude/, or ~/.claude/).
+//  Settings row for choosing Claude's config directory. Shows a menu with
+//  "Auto-detect" and "Choose folder..." options. Default falls back to
+//  CLAUDE_CONFIG_DIR, ~/.config/claude/, then ~/.claude/.
 //
 
 import AppKit
@@ -15,7 +15,28 @@ struct ClaudeDirPickerRow: View {
     @State private var isHovered: Bool = false
 
     var body: some View {
-        Button(action: openFolderPicker) {
+        Menu {
+            Button {
+                applyChoice(path: "")
+            } label: {
+                if isCustom {
+                    Text("Auto-detect")
+                } else {
+                    Label("Auto-detect", systemImage: "checkmark")
+                }
+            }
+
+            Divider()
+
+            Button("Choose folder…") {
+                openFolderPicker()
+            }
+
+            if isCustom {
+                Divider()
+                Text("Current: \(displayValue)")
+            }
+        } label: {
             HStack(spacing: 10) {
                 Image(systemName: "folder")
                     .font(.system(size: 12))
@@ -34,20 +55,9 @@ struct ClaudeDirPickerRow: View {
                     .lineLimit(1)
                     .truncationMode(.middle)
 
-                if isCustom {
-                    // Reset button — clears the override and returns to auto-detect
-                    Button(action: resetToAutoDetect) {
-                        Image(systemName: "arrow.counterclockwise")
-                            .font(.system(size: 10))
-                            .foregroundColor(.white.opacity(0.4))
-                    }
-                    .buttonStyle(.plain)
-                    .help("Reset to auto-detect")
-                } else {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 10))
-                        .foregroundColor(.white.opacity(0.3))
-                }
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.system(size: 9))
+                    .foregroundColor(.white.opacity(0.4))
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)
@@ -56,6 +66,8 @@ struct ClaudeDirPickerRow: View {
                     .fill(isHovered ? Color.white.opacity(0.08) : Color.clear)
             )
         }
+        .menuStyle(.borderlessButton)
+        .menuIndicator(.hidden)
         .buttonStyle(.plain)
         .contentShape(Rectangle())
         .onHover { isHovered = $0 }
@@ -68,14 +80,13 @@ struct ClaudeDirPickerRow: View {
         .white.opacity(isHovered ? 1.0 : 0.7)
     }
 
-    /// Whether the user has set a custom override (vs. falling back to auto-detect).
     private var isCustom: Bool {
         !currentValue.isEmpty && currentValue != ".claude"
     }
 
-    /// Human-readable representation of the active directory. Shortens paths
-    /// under the user's home to `~/...` and shows `Auto-detect` when no
-    /// override is set.
+    /// Human-readable representation of the active directory — the user's
+    /// path shortened to `~/…` when under the home dir, or "Auto-detect"
+    /// when no override is set.
     private var displayValue: String {
         guard isCustom else { return "Auto-detect" }
 
@@ -103,10 +114,9 @@ struct ClaudeDirPickerRow: View {
         panel.canCreateDirectories = false
         panel.directoryURL = ClaudePaths.claudeDir
 
-        // The notch sits at .mainMenu + 3 (27). NSOpenPanel's runModal forces its
-        // own level to .modalPanel (8), so it ends up behind the notch. Drop the
-        // notch to .normal for the duration of the picker so the panel is on top
-        // and fully interactive, then restore the original level + mouse capture.
+        // The notch sits at .mainMenu + 3 (27) and would block/obscure the
+        // picker. Drop it for the duration of the modal so the panel is on
+        // top and fully interactive, then restore.
         let notchWindow = NSApp.windows.first { $0 is NotchPanel }
         let originalLevel = notchWindow?.level ?? (.mainMenu + 3)
         let wasIgnoring = notchWindow?.ignoresMouseEvents ?? true
@@ -121,10 +131,6 @@ struct ClaudeDirPickerRow: View {
         if response == .OK, let url = panel.url {
             applyChoice(path: url.path)
         }
-    }
-
-    private func resetToAutoDetect() {
-        applyChoice(path: "")
     }
 
     private func applyChoice(path: String) {
