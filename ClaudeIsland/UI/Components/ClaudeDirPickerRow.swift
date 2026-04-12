@@ -2,9 +2,10 @@
 //  ClaudeDirPickerRow.swift
 //  ClaudeIsland
 //
-//  Settings row for choosing Claude's config directory. Shows a menu with
-//  "Auto-detect" and "Choose folder..." options. Default falls back to
-//  CLAUDE_CONFIG_DIR, ~/.config/claude/, then ~/.claude/.
+//  Settings row for choosing Claude's config directory. Expands inline
+//  (matching SoundPickerRow / ScreenPickerRow style) with "Auto-detect"
+//  and "Choose folder…" options. Default resolution order when auto:
+//  CLAUDE_CONFIG_DIR → ~/.config/claude/ → ~/.claude/.
 //
 
 import AppKit
@@ -12,65 +13,72 @@ import SwiftUI
 
 struct ClaudeDirPickerRow: View {
     @State private var currentValue: String = AppSettings.claudeDirectoryName
+    @State private var isExpanded: Bool = false
     @State private var isHovered: Bool = false
 
     var body: some View {
-        Menu {
+        VStack(spacing: 0) {
+            // Main row - shows current selection
             Button {
-                applyChoice(path: "")
-            } label: {
-                if isCustom {
-                    Text("Auto-detect")
-                } else {
-                    Label("Auto-detect", systemImage: "checkmark")
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isExpanded.toggle()
                 }
+            } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: "folder")
+                        .font(.system(size: 12))
+                        .foregroundColor(textColor)
+                        .frame(width: 16)
+
+                    Text("Claude Directory")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(textColor)
+
+                    Spacer()
+
+                    Text(displayValue)
+                        .font(.system(size: 11))
+                        .foregroundColor(.white.opacity(0.4))
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 10))
+                        .foregroundColor(.white.opacity(0.4))
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(isHovered ? Color.white.opacity(0.08) : Color.clear)
+                )
             }
+            .buttonStyle(.plain)
+            .onHover { isHovered = $0 }
 
-            Divider()
+            // Expanded options
+            if isExpanded {
+                VStack(spacing: 2) {
+                    ClaudeDirOptionRow(
+                        label: "Auto-detect",
+                        sublabel: isCustom ? nil : resolvedAutoDetectPath,
+                        isSelected: !isCustom
+                    ) {
+                        applyChoice(path: "")
+                    }
 
-            Button("Choose folder…") {
-                openFolderPicker()
+                    ClaudeDirOptionRow(
+                        label: "Choose folder…",
+                        sublabel: isCustom ? displayValue : nil,
+                        isSelected: isCustom
+                    ) {
+                        openFolderPicker()
+                    }
+                }
+                .padding(.leading, 28)
+                .padding(.top, 4)
             }
-
-            if isCustom {
-                Divider()
-                Text("Current: \(displayValue)")
-            }
-        } label: {
-            HStack(spacing: 10) {
-                Image(systemName: "folder")
-                    .font(.system(size: 12))
-                    .foregroundColor(textColor)
-                    .frame(width: 16)
-
-                Text("Claude Directory")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundColor(textColor)
-
-                Spacer()
-
-                Text(displayValue)
-                    .font(.system(size: 11, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.4))
-                    .lineLimit(1)
-                    .truncationMode(.middle)
-
-                Image(systemName: "chevron.up.chevron.down")
-                    .font(.system(size: 9))
-                    .foregroundColor(.white.opacity(0.4))
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(isHovered ? Color.white.opacity(0.08) : Color.clear)
-            )
         }
-        .menuStyle(.borderlessButton)
-        .menuIndicator(.hidden)
-        .buttonStyle(.plain)
-        .contentShape(Rectangle())
-        .onHover { isHovered = $0 }
         .onAppear { currentValue = AppSettings.claudeDirectoryName }
     }
 
@@ -84,16 +92,19 @@ struct ClaudeDirPickerRow: View {
         !currentValue.isEmpty && currentValue != ".claude"
     }
 
-    /// Human-readable representation of the active directory — the user's
-    /// path shortened to `~/…` when under the home dir, or "Auto-detect"
-    /// when no override is set.
+    /// Short display string for the main row's right side.
     private var displayValue: String {
-        guard isCustom else { return "Auto-detect" }
+        isCustom ? shortenedPath(currentValue) : "Auto-detect"
+    }
 
-        let path = currentValue.hasPrefix("/")
-            ? currentValue
-            : NSHomeDirectory() + "/" + currentValue
+    /// What `Auto-detect` actually resolves to right now (for the sublabel).
+    private var resolvedAutoDetectPath: String {
+        shortenedPath(ClaudePaths.claudeDir.path)
+    }
 
+    /// Shortens paths under the user's home directory to `~/…`.
+    private func shortenedPath(_ raw: String) -> String {
+        let path = raw.hasPrefix("/") ? raw : NSHomeDirectory() + "/" + raw
         let home = NSHomeDirectory()
         if path.hasPrefix(home) {
             return "~" + path.dropFirst(home.count)
@@ -114,9 +125,9 @@ struct ClaudeDirPickerRow: View {
         panel.canCreateDirectories = false
         panel.directoryURL = ClaudePaths.claudeDir
 
-        // The notch sits at .mainMenu + 3 (27) and would block/obscure the
-        // picker. Drop it for the duration of the modal so the panel is on
-        // top and fully interactive, then restore.
+        // The notch sits at .mainMenu + 3 and would cover the picker. Drop it
+        // for the duration of the modal so the panel is on top and
+        // interactive, then restore.
         let notchWindow = NSApp.windows.first { $0 is NotchPanel }
         let originalLevel = notchWindow?.level ?? (.mainMenu + 3)
         let wasIgnoring = notchWindow?.ignoresMouseEvents ?? true
@@ -138,5 +149,54 @@ struct ClaudeDirPickerRow: View {
         AppSettings.claudeDirectoryName = path
         ClaudePaths.invalidateCache()
         HookInstaller.installIfNeeded()
+    }
+}
+
+// MARK: - Option Row (Inline)
+
+private struct ClaudeDirOptionRow: View {
+    let label: String
+    let sublabel: String?
+    let isSelected: Bool
+    let action: () -> Void
+
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(isSelected ? TerminalColors.green : Color.white.opacity(0.2))
+                    .frame(width: 6, height: 6)
+
+                Text(label)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.white.opacity(isHovered ? 1.0 : 0.7))
+
+                if let sublabel {
+                    Text(sublabel)
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundColor(.white.opacity(0.35))
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                }
+
+                Spacer()
+
+                if isSelected {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(TerminalColors.green)
+                }
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(isHovered ? Color.white.opacity(0.06) : Color.clear)
+            )
+        }
+        .buttonStyle(.plain)
+        .onHover { isHovered = $0 }
     }
 }
