@@ -66,10 +66,15 @@ enum ClaudePaths {
             }
         }
 
-        // 2. User override via settings (if changed from default)
-        let settingsName = AppSettings.claudeDirectoryName
-        if settingsName != ".claude" {
-            return home.appendingPathComponent(settingsName)
+        // 2. User override via settings — accepts either an absolute path (chosen
+        //    via the folder picker) or a legacy directory name under ~/
+        let settingsValue = AppSettings.claudeDirectoryName
+        if !settingsValue.isEmpty && settingsValue != ".claude" {
+            if settingsValue.hasPrefix("/") {
+                return URL(fileURLWithPath: settingsValue)
+            } else {
+                return home.appendingPathComponent(settingsValue)
+            }
         }
 
         // 3. New default ~/.config/claude/ (if projects/ exists there)

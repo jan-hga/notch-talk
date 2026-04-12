@@ -2,23 +2,20 @@
 //  ClaudeDirPickerRow.swift
 //  ClaudeIsland
 //
-//  Lets users configure the Claude config directory name (e.g. ".claude-internal"
-//  for enterprise/custom Claude distributions). Defaults to ".claude".
+//  Settings row that lets users pick a custom Claude config directory via
+//  the native macOS folder picker. Defaults to auto-detection (CLAUDE_CONFIG_DIR,
+//  ~/.config/claude/, or ~/.claude/).
 //
 
+import AppKit
 import SwiftUI
 
 struct ClaudeDirPickerRow: View {
-    @State private var dirName: String = AppSettings.claudeDirectoryName
-    @State private var isEditing: Bool = false
+    @State private var currentValue: String = AppSettings.claudeDirectoryName
     @State private var isHovered: Bool = false
-    @FocusState private var isFocused: Bool
 
     var body: some View {
-        Button {
-            isEditing = true
-            isFocused = true
-        } label: {
+        Button(action: openFolderPicker) {
             HStack(spacing: 10) {
                 Image(systemName: "folder")
                     .font(.system(size: 12))
@@ -31,23 +28,23 @@ struct ClaudeDirPickerRow: View {
 
                 Spacer()
 
-                if isEditing {
-                    TextField("", text: $dirName)
-                        .textFieldStyle(.plain)
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.9))
-                        .multilineTextAlignment(.trailing)
-                        .frame(maxWidth: 140)
-                        .focused($isFocused)
-                        .onSubmit { commitEdit() }
-                        .onExitCommand { cancelEdit() }
-                } else {
-                    Text(dirName)
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.4))
-                        .lineLimit(1)
+                Text(displayValue)
+                    .font(.system(size: 11, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.4))
+                    .lineLimit(1)
+                    .truncationMode(.middle)
 
-                    Image(systemName: "pencil")
+                if isCustom {
+                    // Reset button — clears the override and returns to auto-detect
+                    Button(action: resetToAutoDetect) {
+                        Image(systemName: "arrow.counterclockwise")
+                            .font(.system(size: 10))
+                            .foregroundColor(.white.opacity(0.4))
+                    }
+                    .buttonStyle(.plain)
+                    .help("Reset to auto-detect")
+                } else {
+                    Image(systemName: "chevron.right")
                         .font(.system(size: 10))
                         .foregroundColor(.white.opacity(0.3))
                 }
@@ -62,26 +59,66 @@ struct ClaudeDirPickerRow: View {
         .buttonStyle(.plain)
         .contentShape(Rectangle())
         .onHover { isHovered = $0 }
-        .onAppear { dirName = AppSettings.claudeDirectoryName }
+        .onAppear { currentValue = AppSettings.claudeDirectoryName }
     }
+
+    // MARK: - Presentation
 
     private var textColor: Color {
         .white.opacity(isHovered ? 1.0 : 0.7)
     }
 
-    private func commitEdit() {
-        let trimmed = dirName.trimmingCharacters(in: .whitespaces)
-        dirName = trimmed.isEmpty ? ".claude" : trimmed
-        AppSettings.claudeDirectoryName = dirName
-        ClaudePaths.invalidateCache()
-        HookInstaller.installIfNeeded()
-        isEditing = false
-        isFocused = false
+    /// Whether the user has set a custom override (vs. falling back to auto-detect).
+    private var isCustom: Bool {
+        !currentValue.isEmpty && currentValue != ".claude"
     }
 
-    private func cancelEdit() {
-        dirName = AppSettings.claudeDirectoryName
-        isEditing = false
-        isFocused = false
+    /// Human-readable representation of the active directory. Shortens paths
+    /// under the user's home to `~/...` and shows `Auto-detect` when no
+    /// override is set.
+    private var displayValue: String {
+        guard isCustom else { return "Auto-detect" }
+
+        let path = currentValue.hasPrefix("/")
+            ? currentValue
+            : NSHomeDirectory() + "/" + currentValue
+
+        let home = NSHomeDirectory()
+        if path.hasPrefix(home) {
+            return "~" + path.dropFirst(home.count)
+        }
+        return path
+    }
+
+    // MARK: - Actions
+
+    private func openFolderPicker() {
+        let panel = NSOpenPanel()
+        panel.title = "Choose Claude Config Directory"
+        panel.message = "Select the folder Claude Code uses (typically ~/.claude or ~/.config/claude)."
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = false
+        panel.allowsMultipleSelection = false
+        panel.showsHiddenFiles = true
+        panel.canCreateDirectories = false
+
+        // Seed the browser at the currently-resolved directory so users land
+        // near the existing config
+        panel.directoryURL = ClaudePaths.claudeDir
+
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        applyChoice(path: url.path)
+    }
+
+    private func resetToAutoDetect() {
+        applyChoice(path: "")
+    }
+
+    private func applyChoice(path: String) {
+        currentValue = path
+        AppSettings.claudeDirectoryName = path
+        ClaudePaths.invalidateCache()
+        HookInstaller.installIfNeeded()
     }
 }
