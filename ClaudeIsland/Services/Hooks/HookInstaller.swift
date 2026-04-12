@@ -11,11 +11,8 @@ struct HookInstaller {
 
     /// Install hook script and update settings.json on app launch
     static func installIfNeeded() {
-        let claudeDir = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent(".claude")
-        let hooksDir = claudeDir.appendingPathComponent("hooks")
+        let hooksDir = ClaudePaths.hooksDir
         let pythonScript = hooksDir.appendingPathComponent("claude-island-state.py")
-        let settings = claudeDir.appendingPathComponent("settings.json")
 
         try? FileManager.default.createDirectory(
             at: hooksDir,
@@ -31,7 +28,7 @@ struct HookInstaller {
             )
         }
 
-        updateSettings(at: settings)
+        updateSettings(at: ClaudePaths.settingsFile)
     }
 
     private static func updateSettings(at settingsURL: URL) {
@@ -42,7 +39,7 @@ struct HookInstaller {
         }
 
         let python = detectPython()
-        let command = "\(python) ~/.claude/hooks/claude-island-state.py"
+        let command = "\(python) \(ClaudePaths.hookScriptShellPath)"
         let hookEntry: [[String: Any]] = [["type": "command", "command": command]]
         let hookEntryWithTimeout: [[String: Any]] = [["type": "command", "command": command, "timeout": 86400]]
         let withMatcher: [[String: Any]] = [["matcher": "*", "hooks": hookEntry]]
@@ -100,9 +97,7 @@ struct HookInstaller {
 
     /// Check if hooks are currently installed
     static func isInstalled() -> Bool {
-        let claudeDir = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent(".claude")
-        let settings = claudeDir.appendingPathComponent("settings.json")
+        let settings = ClaudePaths.settingsFile
 
         guard let data = try? Data(contentsOf: settings),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -129,11 +124,9 @@ struct HookInstaller {
 
     /// Uninstall hooks from settings.json and remove script
     static func uninstall() {
-        let claudeDir = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent(".claude")
-        let hooksDir = claudeDir.appendingPathComponent("hooks")
+        let hooksDir = ClaudePaths.hooksDir
         let pythonScript = hooksDir.appendingPathComponent("claude-island-state.py")
-        let settings = claudeDir.appendingPathComponent("settings.json")
+        let settings = ClaudePaths.settingsFile
 
         try? FileManager.default.removeItem(at: pythonScript)
 

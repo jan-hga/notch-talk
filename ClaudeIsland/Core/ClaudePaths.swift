@@ -1,0 +1,84 @@
+//
+//  ClaudePaths.swift
+//  ClaudeIsland
+//
+//  Single source of truth for all Claude config directory paths.
+//  Resolves automatically via CLAUDE_CONFIG_DIR env var or filesystem detection,
+//  with an optional user override via AppSettings.claudeDirectoryName.
+//
+
+import Foundation
+
+enum ClaudePaths {
+
+    /// Cached resolved directory to avoid filesystem checks on every access
+    private static var _cachedDir: URL?
+
+    /// Root Claude config directory, resolved once and cached.
+    ///
+    /// Resolution order:
+    /// 1. CLAUDE_CONFIG_DIR environment variable (if set and exists)
+    /// 2. AppSettings.claudeDirectoryName override (if changed from default)
+    /// 3. ~/.config/claude/ (new default since Claude Code v2.1.30+, if projects/ exists)
+    /// 4. ~/.claude/ (legacy fallback)
+    static var claudeDir: URL {
+        if let cached = _cachedDir { return cached }
+        let resolved = resolveClaudeDir()
+        _cachedDir = resolved
+        return resolved
+    }
+
+    static var hooksDir: URL {
+        claudeDir.appendingPathComponent("hooks")
+    }
+
+    static var settingsFile: URL {
+        claudeDir.appendingPathComponent("settings.json")
+    }
+
+    static var projectsDir: URL {
+        claudeDir.appendingPathComponent("projects")
+    }
+
+    /// Shell-expanded path for hook commands in settings.json.
+    /// Uses "~/" so Claude Code resolves it relative to the user's home.
+    static var hookScriptShellPath: String {
+        let dirName = claudeDir.lastPathComponent
+        return "~/\(dirName)/hooks/claude-island-state.py"
+    }
+
+    /// Invalidate the cached directory so the next access re-resolves.
+    /// Call this when the user changes AppSettings.claudeDirectoryName.
+    static func invalidateCache() {
+        _cachedDir = nil
+    }
+
+    private static func resolveClaudeDir() -> URL {
+        let fm = FileManager.default
+        let home = fm.homeDirectoryForCurrentUser
+
+        // 1. CLAUDE_CONFIG_DIR env var takes highest priority
+        if let envDir = Foundation.ProcessInfo.processInfo.environment["CLAUDE_CONFIG_DIR"] {
+            let expanded = (envDir as NSString).expandingTildeInPath
+            let url = URL(fileURLWithPath: expanded)
+            if fm.fileExists(atPath: url.path) {
+                return url
+            }
+        }
+
+        // 2. User override via settings (if changed from default)
+        let settingsName = AppSettings.claudeDirectoryName
+        if settingsName != ".claude" {
+            return home.appendingPathComponent(settingsName)
+        }
+
+        // 3. New default ~/.config/claude/ (if projects/ exists there)
+        let newDefault = home.appendingPathComponent(".config/claude")
+        if fm.fileExists(atPath: newDefault.appendingPathComponent("projects").path) {
+            return newDefault
+        }
+
+        // 4. Legacy fallback
+        return home.appendingPathComponent(".claude")
+    }
+}
