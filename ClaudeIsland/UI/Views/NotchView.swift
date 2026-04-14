@@ -365,10 +365,15 @@ struct NotchView: View {
                     sessionMonitor: sessionMonitor,
                     viewModel: viewModel
                 )
+                // Force a fresh ChatView when switching sessions — otherwise
+                // @State (history, session, scroll position) leaks from the
+                // previous session and the view shows the wrong conversation.
+                // Keyed on sessionId only (not the whole SessionState) so
+                // per-event updates still reuse the view.
+                .id(session.sessionId)
             }
         }
         .frame(width: notchSize.width - 24) // Fixed width to prevent text reflow
-        // Removed .id() - was causing view recreation and performance issues
     }
 
     // MARK: - Event Handlers
