@@ -31,12 +31,22 @@ class ChatHistoryManager: ObservableObject {
         histories[sessionId] ?? []
     }
 
+    /// Whether we have non-empty chat history for the session. A session can
+    /// be in `loadedSessions` (registered via hook events) while its JSONL
+    /// has never been parsed and `histories[sessionId]` is empty — so "loaded"
+    /// here requires actual items, not just awareness of the session.
     func isLoaded(sessionId: String) -> Bool {
-        loadedSessions.contains(sessionId)
+        guard loadedSessions.contains(sessionId) else { return false }
+        return !(histories[sessionId] ?? []).isEmpty
     }
 
     func loadFromFile(sessionId: String, cwd: String) async {
-        guard !loadedSessions.contains(sessionId) else { return }
+        // Skip only when we've both seen the session AND have history parsed
+        // for it. Without the history check, sessions registered via hooks
+        // would never get their JSONL parsed on first chat open.
+        if loadedSessions.contains(sessionId) && !(histories[sessionId] ?? []).isEmpty {
+            return
+        }
         loadedSessions.insert(sessionId)
         await SessionStore.shared.process(.loadHistory(sessionId: sessionId, cwd: cwd))
     }
