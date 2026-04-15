@@ -13,7 +13,11 @@ class ChatHistoryManager: ObservableObject {
     @Published private(set) var histories: [String: [ChatHistoryItem]] = [:]
     @Published private(set) var agentDescriptions: [String: [String: String]] = [:]
 
-    private var loadedSessions: Set<String> = []
+    /// Sessions whose JSONL file we've asked SessionStore to parse in this
+    /// app session. Only populated by `loadFromFile` — NOT by session
+    /// discovery via hooks. (Hook events only give tool calls, not the
+    /// full user/assistant text conversation.)
+    private var jsonlParsedSessions: Set<String> = []
     private var cancellables = Set<AnyCancellable>()
 
     private init() {
@@ -31,23 +35,16 @@ class ChatHistoryManager: ObservableObject {
         histories[sessionId] ?? []
     }
 
-    /// Whether we have non-empty chat history for the session. A session can
-    /// be in `loadedSessions` (registered via hook events) while its JSONL
-    /// has never been parsed and `histories[sessionId]` is empty — so "loaded"
-    /// here requires actual items, not just awareness of the session.
+    /// Whether we've parsed the session's JSONL file in this app session.
+    /// Hook-driven session discovery does NOT mark a session as loaded —
+    /// only an explicit `loadFromFile` call does.
     func isLoaded(sessionId: String) -> Bool {
-        guard loadedSessions.contains(sessionId) else { return false }
-        return !(histories[sessionId] ?? []).isEmpty
+        jsonlParsedSessions.contains(sessionId)
     }
 
     func loadFromFile(sessionId: String, cwd: String) async {
-        // Skip only when we've both seen the session AND have history parsed
-        // for it. Without the history check, sessions registered via hooks
-        // would never get their JSONL parsed on first chat open.
-        if loadedSessions.contains(sessionId) && !(histories[sessionId] ?? []).isEmpty {
-            return
-        }
-        loadedSessions.insert(sessionId)
+        guard !jsonlParsedSessions.contains(sessionId) else { return }
+        jsonlParsedSessions.insert(sessionId)
         await SessionStore.shared.process(.loadHistory(sessionId: sessionId, cwd: cwd))
     }
 
@@ -74,7 +71,7 @@ class ChatHistoryManager: ObservableObject {
     }
 
     func clearHistory(for sessionId: String) {
-        loadedSessions.remove(sessionId)
+        jsonlParsedSessions.remove(sessionId)
         histories.removeValue(forKey: sessionId)
         Task {
             await SessionStore.shared.process(.sessionEnded(sessionId: sessionId))
@@ -90,7 +87,6 @@ class ChatHistoryManager: ObservableObject {
             let filteredItems = filterOutSubagentTools(session.chatItems)
             newHistories[session.sessionId] = filteredItems
             newAgentDescriptions[session.sessionId] = session.subagentState.agentDescriptions
-            loadedSessions.insert(session.sessionId)
         }
         histories = newHistories
         agentDescriptions = newAgentDescriptions
