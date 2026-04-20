@@ -10,14 +10,14 @@ RELEASE_DIR="$PROJECT_DIR/releases"
 KEYS_DIR="$PROJECT_DIR/.sparkle-keys"
 
 # GitHub repository (owner/repo format)
-GITHUB_REPO="farouqaldori/claude-island"
+GITHUB_REPO="farouqaldori/vibe-notch"
 
 # Website repo for auto-updating appcast
 WEBSITE_DIR="${CLAUDE_ISLAND_WEBSITE:-$PROJECT_DIR/../ClaudeIsland-website}"
 WEBSITE_PUBLIC="$WEBSITE_DIR/public"
 
-APP_PATH="$EXPORT_PATH/Claude Island.app"
-APP_NAME="ClaudeIsland"
+APP_PATH="$EXPORT_PATH/Vibe Notch.app"
+APP_NAME="VibeNotch"
 KEYCHAIN_PROFILE="ClaudeIsland"
 
 echo "=== Creating Release ==="
@@ -100,17 +100,17 @@ fi
 if command -v create-dmg &> /dev/null; then
     echo "Using create-dmg for prettier output..."
     create-dmg \
-        --volname "Claude Island" \
+        --volname "Vibe Notch" \
         --window-size 600 400 \
         --icon-size 100 \
-        --icon "Claude Island.app" 150 200 \
+        --icon "Vibe Notch.app" 150 200 \
         --app-drop-link 450 200 \
-        --hide-extension "Claude Island.app" \
+        --hide-extension "Vibe Notch.app" \
         "$DMG_PATH" \
         "$APP_PATH"
 else
     echo "Using hdiutil (install create-dmg for prettier DMG: brew install create-dmg)"
-    hdiutil create -volname "Claude Island" \
+    hdiutil create -volname "Vibe Notch" \
         -srcfolder "$APP_PATH" \
         -ov -format UDZO \
         "$DMG_PATH"
@@ -215,16 +215,16 @@ else
         echo "Creating release v$VERSION..."
         gh release create "v$VERSION" "$DMG_PATH" \
             --repo "$GITHUB_REPO" \
-            --title "Claude Island v$VERSION" \
-            --notes "## Claude Island v$VERSION
+            --title "Vibe Notch v$VERSION" \
+            --notes "## Vibe Notch v$VERSION
 
 ### Installation
 1. Download \`$APP_NAME-$VERSION.dmg\`
-2. Open the DMG and drag Claude Island to Applications
-3. Launch Claude Island from Applications
+2. Open the DMG and drag Vibe Notch to Applications
+3. Launch Vibe Notch from Applications
 
 ### Auto-updates
-After installation, Claude Island will automatically check for updates."
+After installation, Vibe Notch will automatically check for updates."
     fi
 
     GITHUB_DOWNLOAD_URL="https://github.com/$GITHUB_REPO/releases/download/v$VERSION/$APP_NAME-$VERSION.dmg"
@@ -271,7 +271,7 @@ EOF
     # repo is disabled, so git push is no longer an option).
     cd "$WEBSITE_DIR" || exit 1
 
-    WRANGLER_PROJECT="${CLAUDE_ISLAND_WRANGLER_PROJECT:-claudeisland-website}"
+    WRANGLER_PROJECT="${CLAUDE_ISLAND_WRANGLER_PROJECT:-vibenotch-website}"
 
     read -p "Deploy website to Cloudflare Pages ($WRANGLER_PROJECT)? (Y/n) " -n 1 -r
     echo
