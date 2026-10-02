@@ -2,21 +2,16 @@
 //  NewChatRow.swift
 //  ClaudeIsland
 //
-//  "New chat" row: the working folder is chosen once, and the terminal only
-//  opens when the user presses the start button.
+//  "New chat" row: expands to a single option that opens a terminal running
+//  claude in the home folder. Nothing opens until that option is pressed.
 //
 
 import AppKit
 import SwiftUI
 
 struct NewChatRow: View {
-    @AppStorage("workingDirectory") private var workingDirectory: String = ""
     @State private var isExpanded = false
     @State private var isHovered = false
-
-    private var hasFolder: Bool {
-        !workingDirectory.isEmpty && FileManager.default.fileExists(atPath: workingDirectory)
-    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -52,22 +47,16 @@ struct NewChatRow: View {
             .onHover { isHovered = $0 }
 
             if isExpanded {
-                VStack(alignment: .leading, spacing: 8) {
-                    if hasFolder {
-                        folderLine
-                        ChatActionButton(title: L10n.tr("Start in Terminal"), isPrimary: true) {
-                            Task { _ = await TerminalLauncher.startClaude(in: workingDirectory) }
+                VStack(spacing: 2) {
+                    StartOptionRow(label: L10n.tr("Start in Terminal")) {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isExpanded = false
                         }
-                    } else {
-                        ChatActionButton(title: L10n.tr("Choose folder…"), isPrimary: true) {
-                            chooseFolder()
-                        }
+                        Task { _ = await TerminalLauncher.startClaude(in: NSHomeDirectory()) }
                     }
                 }
                 .padding(.leading, 28)
-                .padding(.trailing, 12)
                 .padding(.top, 4)
-                .padding(.bottom, 4)
             }
         }
     }
@@ -75,76 +64,37 @@ struct NewChatRow: View {
     private var textColor: Color {
         .white.opacity(isHovered ? 1.0 : 0.7)
     }
-
-    private var folderLine: some View {
-        HStack(spacing: 8) {
-            VStack(alignment: .leading, spacing: 1) {
-                Text(L10n.tr("Working folder"))
-                    .font(.system(size: 10))
-                    .foregroundColor(.white.opacity(0.35))
-                Text(shortened(workingDirectory))
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.white.opacity(0.75))
-                    .lineLimit(1)
-                    .truncationMode(.head)
-            }
-            Spacer()
-            Button {
-                chooseFolder()
-            } label: {
-                Text(L10n.tr("Change"))
-                    .font(.system(size: 11))
-                    .foregroundColor(.white.opacity(0.5))
-            }
-            .buttonStyle(.plain)
-        }
-    }
-
-    private func shortened(_ path: String) -> String {
-        let home = NSHomeDirectory()
-        return path.hasPrefix(home) ? "~" + path.dropFirst(home.count) : path
-    }
-
-    private func chooseFolder() {
-        let panel = NSOpenPanel()
-        panel.title = L10n.tr("Choose project folder")
-        panel.canChooseDirectories = true
-        panel.canChooseFiles = false
-        panel.allowsMultipleSelection = false
-        panel.directoryURL = URL(fileURLWithPath: hasFolder ? workingDirectory : NSHomeDirectory())
-
-        // The notch sits above normal windows and would cover the picker
-        let notchWindow = NSApp.windows.first { $0 is NotchPanel }
-        let originalLevel = notchWindow?.level ?? (.mainMenu + 3)
-        let wasIgnoring = notchWindow?.ignoresMouseEvents ?? true
-        notchWindow?.level = .normal
-        notchWindow?.ignoresMouseEvents = true
-
-        let response = panel.runModal()
-
-        notchWindow?.level = originalLevel
-        notchWindow?.ignoresMouseEvents = wasIgnoring
-
-        if response == .OK, let url = panel.url {
-            workingDirectory = url.path
-        }
-    }
 }
 
-private struct ChatActionButton: View {
-    let title: String
-    let isPrimary: Bool
+private struct StartOptionRow: View {
+    let label: String
     let action: () -> Void
+
+    @State private var isHovered = false
 
     var body: some View {
         Button(action: action) {
-            Text(title)
-                .font(.system(size: 12, weight: .medium))
-                .foregroundColor(isPrimary ? .black : .white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(Capsule().fill(Color.white.opacity(isPrimary ? 0.95 : 0.1)))
+            HStack(spacing: 8) {
+                Image(systemName: "terminal")
+                    .font(.system(size: 10))
+                    .foregroundColor(TerminalColors.green)
+                    .frame(width: 12)
+
+                Text(label)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.white.opacity(isHovered ? 1.0 : 0.7))
+
+                Spacer()
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(isHovered ? Color.white.opacity(0.06) : Color.clear)
+            )
         }
         .buttonStyle(.plain)
+        .contentShape(Rectangle())
+        .onHover { isHovered = $0 }
     }
 }
