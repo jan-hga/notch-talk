@@ -8,7 +8,7 @@
 import Markdown
 import SwiftUI
 
-// MARK: - Markdown.Document Cache
+// MARK: - Document Cache
 
 /// Caches parsed markdown documents to avoid re-parsing
 private final class DocumentCache: @unchecked Sendable {
