@@ -96,3 +96,4 @@
 "Starting..." = "正在启动...";
 "Choose project folder" = "选择项目文件夹";
 "Couldn't start Claude" = "无法启动 Claude";
+"Remove folder" = "移除文件夹";

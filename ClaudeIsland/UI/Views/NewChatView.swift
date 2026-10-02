@@ -75,6 +75,18 @@ struct NewChatView: View {
                 chooseWorkspace()
             }
 
+            if !storedDirectory.isEmpty && !isStarting {
+                Button {
+                    storedDirectory = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white.opacity(0.35))
+                }
+                .buttonStyle(.plain)
+                .help(L10n.tr("Remove folder"))
+            }
+
             Spacer()
         }
         .padding(.horizontal, 12)
