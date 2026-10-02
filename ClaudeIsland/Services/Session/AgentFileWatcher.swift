@@ -40,7 +40,7 @@ class AgentFileWatcher {
         self.agentId = agentId
         self.cwd = cwd
 
-        let projectDir = cwd.replacingOccurrences(of: "/", with: "-")
+        let projectDir = ClaudePaths.projectDirName(for: cwd)
                             .replacingOccurrences(of: ".", with: "-")
         self.filePath = ConversationParser.subagentFilePath(sessionId: sessionId, agentId: agentId, projectDir: projectDir)
     }

@@ -31,6 +31,9 @@ struct ClaudeInstancesView: View {
             Text(L10n.tr("Run claude in terminal"))
                 .font(.system(size: 11))
                 .foregroundColor(.white.opacity(0.25))
+
+            NewSessionRow(recentDirectories: [])
+                .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -79,6 +82,8 @@ struct ClaudeInstancesView: View {
                     )
                     .id(session.stableId)
                 }
+
+                NewSessionRow(recentDirectories: sortedInstances.map(\.cwd))
             }
             .padding(.vertical, 4)
         }

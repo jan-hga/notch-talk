@@ -39,7 +39,7 @@ class JSONLInterruptWatcher {
 
     init(sessionId: String, cwd: String) {
         self.sessionId = sessionId
-        let projectDir = cwd.replacingOccurrences(of: "/", with: "-")
+        let projectDir = ClaudePaths.projectDirName(for: cwd)
                             .replacingOccurrences(of: ".", with: "-")
         self.filePath = ClaudePaths.projectsDir.path + "/" + projectDir + "/" + sessionId + ".jsonl"
     }

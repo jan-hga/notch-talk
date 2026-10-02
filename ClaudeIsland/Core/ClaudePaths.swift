@@ -10,6 +10,21 @@
 import Foundation
 
 enum ClaudePaths {
+    /// Folder name Claude Code uses under projects/ for a working directory:
+    /// every character other than an ASCII letter or digit becomes "-"
+    /// (one per UTF-16 unit, matching Claude Code's JavaScript regex).
+    nonisolated static func projectDirName(for cwd: String) -> String {
+        var result = ""
+        for unit in cwd.utf16 {
+            if let scalar = Unicode.Scalar(unit), scalar.isASCII, Character(scalar).isLetter || Character(scalar).isNumber {
+                result.unicodeScalars.append(scalar)
+            } else {
+                result.append("-")
+            }
+        }
+        return result
+    }
+
 
     /// Cached resolved directory to avoid filesystem checks on every access
     private static var _cachedDir: URL?

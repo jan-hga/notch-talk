@@ -93,3 +93,6 @@
 "Wrote" = "書き込みました";
 "Wrote %@" = "%@ を書き込みました";
 "You:" = "あなた:";
+"New session" = "新規セッション";
+"Home folder" = "ホームフォルダ";
+"Choose project folder" = "プロジェクトフォルダを選択";

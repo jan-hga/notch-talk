@@ -93,3 +93,6 @@
 "Wrote" = "Kirjoitettu";
 "Wrote %@" = "%@ kirjoitettu";
 "You:" = "Sinä:";
+"New session" = "Uusi istunto";
+"Home folder" = "Kotikansio";
+"Choose project folder" = "Valitse projektikansio";
