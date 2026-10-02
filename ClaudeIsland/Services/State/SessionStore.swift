@@ -142,7 +142,12 @@ actor SessionStore {
 
         let newPhase = event.determinePhase()
 
-        if session.phase.canTransition(to: newPhase) {
+        // Newer Claude Code fires SubagentStart/SubagentStop after the turn's Stop
+        // (background agents). They must not flip a finished session back to "working".
+        let isSubagentEvent = event.event == "SubagentStart" || event.event == "SubagentStop"
+        if isSubagentEvent && !session.phase.isWorking {
+            // keep the current phase
+        } else if session.phase.canTransition(to: newPhase) {
             session.phase = newPhase
         } else {
             Self.logger.debug("Invalid transition: \(String(describing: session.phase), privacy: .public) -> \(String(describing: newPhase), privacy: .public), ignoring")

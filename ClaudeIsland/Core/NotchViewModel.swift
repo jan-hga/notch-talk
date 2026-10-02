@@ -185,6 +185,9 @@ class NotchViewModel: ObservableObject {
     }
 
     private func handleMouseDown() {
+        // A folder picker is open: clicks in it must not close the notch
+        guard !NotchModalGuard.isActive else { return }
+
         let location = NSEvent.mouseLocation
 
         switch status {

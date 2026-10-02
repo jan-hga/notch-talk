@@ -164,17 +164,7 @@ struct NewChatView: View {
         panel.allowsMultipleSelection = false
         panel.directoryURL = URL(fileURLWithPath: workspace)
 
-        // The notch sits above normal windows and would cover the picker
-        let notchWindow = NSApp.windows.first { $0 is NotchPanel }
-        let originalLevel = notchWindow?.level ?? (.mainMenu + 3)
-        let wasIgnoring = notchWindow?.ignoresMouseEvents ?? true
-        notchWindow?.level = .normal
-        notchWindow?.ignoresMouseEvents = true
-
-        let response = panel.runModal()
-
-        notchWindow?.level = originalLevel
-        notchWindow?.ignoresMouseEvents = wasIgnoring
+        let response = NotchModalGuard.run(panel)
 
         if response == .OK, let url = panel.url {
             storedDirectory = url.path
