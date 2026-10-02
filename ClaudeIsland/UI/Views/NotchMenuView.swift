@@ -89,15 +89,6 @@ struct NotchMenuView: View {
                 // About
                 UpdateRow(updateManager: updateManager)
 
-                MenuRow(
-                    icon: "star",
-                    label: "Star on GitHub"
-                ) {
-                    if let url = URL(string: "https://github.com/farouqaldori/vibe-notch") {
-                        NSWorkspace.shared.open(url)
-                    }
-                }
-
                 Divider()
                     .background(Color.white.opacity(0.08))
                     .padding(.vertical, 4)

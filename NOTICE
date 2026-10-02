@@ -1,0 +1,14 @@
+Notch Talk
+Copyright 2026 Jan Haaga
+
+This product is a modified version of "Vibe Notch" (previously "Claude Island"),
+Copyright 2025 Farouq Aldori, licensed under the Apache License, Version 2.0.
+Original project: https://github.com/farouqaldori/vibe-notch
+
+Changes made in this version:
+- Messages can be sent from the notch to Claude Code sessions running in
+  Terminal.app or iTerm2 (matched by tty), not only inside tmux.
+- Renamed the app and changed the bundle identifier.
+- Removed the Mixpanel analytics and the built-in auto-update feed.
+
+"Vibe Notch" and its logo are not licensed for use by this product.
