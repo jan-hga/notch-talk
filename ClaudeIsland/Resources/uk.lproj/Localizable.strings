@@ -93,5 +93,5 @@
 "Wrote" = "Записано";
 "Wrote %@" = "Записано %@";
 "You:" = "Ви:";
-"New chat" = "Новий чат";
-"Start in Terminal" = "Запустити в Терміналі";
+"Starting..." = "Запуск...";
+"Choose project folder" = "Виберіть теку проєкту";

@@ -93,5 +93,5 @@
 "Wrote" = "Yazıldı";
 "Wrote %@" = "%@ yazıldı";
 "You:" = "Sen:";
-"New chat" = "Yeni sohbet";
-"Start in Terminal" = "Terminal'de başlat";
+"Starting..." = "Başlatılıyor...";
+"Choose project folder" = "Proje klasörünü seç";

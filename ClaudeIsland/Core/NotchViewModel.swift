@@ -26,12 +26,14 @@ enum NotchOpenReason {
 enum NotchContentType: Equatable {
     case instances
     case menu
+    case newChat
     case chat(SessionState)
 
     var id: String {
         switch self {
         case .instances: return "instances"
         case .menu: return "menu"
+        case .newChat: return "newChat"
         case .chat(let session): return "chat-\(session.sessionId)"
         }
     }
@@ -65,7 +67,7 @@ class NotchViewModel: ObservableObject {
     /// Dynamic opened size based on content type
     var openedSize: CGSize {
         switch contentType {
-        case .chat:
+        case .chat, .newChat:
             // Large size for chat view
             return CGSize(
                 width: min(screenRect.width * 0.5, 600),
@@ -278,6 +280,10 @@ class NotchViewModel: ObservableObject {
 
     func toggleMenu() {
         contentType = contentType == .menu ? .instances : .menu
+    }
+
+    func showNewChat() {
+        contentType = .newChat
     }
 
     func showChat(for session: SessionState) {

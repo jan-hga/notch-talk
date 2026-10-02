@@ -93,5 +93,5 @@
 "Wrote" = "Skrivet";
 "Wrote %@" = "%@ skrivet";
 "You:" = "Du:";
-"New chat" = "Ny chatt";
-"Start in Terminal" = "Starta i Terminal";
+"Starting..." = "Startar...";
+"Choose project folder" = "Välj projektmapp";

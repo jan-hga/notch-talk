@@ -93,5 +93,5 @@
 "Wrote" = "लिखा गया";
 "Wrote %@" = "%@ लिखा गया";
 "You:" = "आप:";
-"New chat" = "नई चैट";
-"Start in Terminal" = "टर्मिनल में शुरू करें";
+"Starting..." = "शुरू हो रहा है...";
+"Choose project folder" = "प्रोजेक्ट फ़ोल्डर चुनें";

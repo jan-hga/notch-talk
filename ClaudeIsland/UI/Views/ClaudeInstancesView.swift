@@ -13,10 +13,15 @@ struct ClaudeInstancesView: View {
     @ObservedObject var viewModel: NotchViewModel
 
     var body: some View {
-        if sessionMonitor.instances.isEmpty {
-            emptyState
-        } else {
-            instancesList
+        VStack(spacing: 0) {
+            if sessionMonitor.instances.isEmpty {
+                emptyState
+            } else {
+                instancesList
+            }
+
+            NewChatButton { viewModel.showNewChat() }
+                .padding(.vertical, 6)
         }
     }
 
@@ -32,8 +37,6 @@ struct ClaudeInstancesView: View {
                 .font(.system(size: 11))
                 .foregroundColor(.white.opacity(0.25))
 
-            NewChatRow()
-                .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -83,7 +86,6 @@ struct ClaudeInstancesView: View {
                     .id(session.stableId)
                 }
 
-                NewChatRow()
             }
             .padding(.vertical, 4)
         }
@@ -508,5 +510,30 @@ struct TerminalButton: View {
             .clipShape(Capsule())
         }
         .buttonStyle(.plain)
+    }
+}
+
+// MARK: - New Chat Button
+
+/// Round "+" without text, centered below the session list
+struct NewChatButton: View {
+    let action: () -> Void
+
+    @State private var isHovered = false
+
+    var body: some View {
+        HStack {
+            Spacer()
+            Button(action: action) {
+                Image(systemName: "plus")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(.white.opacity(isHovered ? 1.0 : 0.7))
+                    .frame(width: 32, height: 32)
+                    .background(Circle().fill(Color.white.opacity(isHovered ? 0.18 : 0.1)))
+            }
+            .buttonStyle(.plain)
+            .onHover { isHovered = $0 }
+            Spacer()
+        }
     }
 }

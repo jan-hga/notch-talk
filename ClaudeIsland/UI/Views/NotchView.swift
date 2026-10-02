@@ -360,6 +360,8 @@ struct NotchView: View {
                 )
             case .menu:
                 NotchMenuView(viewModel: viewModel)
+            case .newChat:
+                NewChatView(sessionMonitor: sessionMonitor, viewModel: viewModel)
             case .chat(let session):
                 ChatView(
                     sessionId: session.sessionId,

@@ -93,5 +93,5 @@
 "Wrote" = "작성됨";
 "Wrote %@" = "%@ 작성됨";
 "You:" = "나:";
-"New chat" = "새 채팅";
-"Start in Terminal" = "터미널에서 시작";
+"Starting..." = "시작 중...";
+"Choose project folder" = "프로젝트 폴더 선택";

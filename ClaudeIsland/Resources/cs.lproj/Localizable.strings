@@ -93,5 +93,5 @@
 "Wrote" = "Zapsáno";
 "Wrote %@" = "Zapsáno: %@";
 "You:" = "Vy:";
-"New chat" = "Nový chat";
-"Start in Terminal" = "Spustit v Terminálu";
+"Starting..." = "Spouštění...";
+"Choose project folder" = "Vyberte složku projektu";

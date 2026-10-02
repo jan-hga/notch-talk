@@ -93,5 +93,5 @@
 "Wrote" = "Zapisano";
 "Wrote %@" = "Zapisano %@";
 "You:" = "Ty:";
-"New chat" = "Nowy czat";
-"Start in Terminal" = "Uruchom w Terminalu";
+"Starting..." = "Uruchamianie...";
+"Choose project folder" = "Wybierz folder projektu";

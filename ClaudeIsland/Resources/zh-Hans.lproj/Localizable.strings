@@ -93,5 +93,5 @@
 "Wrote" = "已写入";
 "Wrote %@" = "已写入 %@";
 "You:" = "你：";
-"New chat" = "新聊天";
-"Start in Terminal" = "在终端中启动";
+"Starting..." = "正在启动...";
+"Choose project folder" = "选择项目文件夹";
