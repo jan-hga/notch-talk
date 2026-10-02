@@ -19,5 +19,11 @@
     <key>NSHumanReadableCopyright</key>
     <string>Copyright 2026 Jan Haaga</string>
 
+    <key>SUFeedURL</key>
+    <string>https://jan-hga.github.io/notch-talk/appcast.xml</string>
+    <key>SUPublicEDKey</key>
+    <string>SJuYmGitjiBLtrbCqEAAX3xMGmLZCkMJxhyqs7qy8Do=</string>
+    <key>SUEnableAutomaticChecks</key>
+    <true/>
 </dict>
 </plist>
