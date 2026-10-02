@@ -93,6 +93,8 @@
 "Wrote" = "Geschrieben";
 "Wrote %@" = "%@ geschrieben";
 "You:" = "Du:";
-"New session" = "Neue Sitzung";
-"Home folder" = "Benutzerordner";
+"New chat" = "Neuer Chat";
+"Working folder" = "Arbeitsordner";
+"Start in Terminal" = "Im Terminal starten";
+"Change" = "Ändern";
 "Choose project folder" = "Projektordner wählen";

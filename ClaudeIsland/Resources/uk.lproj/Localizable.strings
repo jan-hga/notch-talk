@@ -93,6 +93,8 @@
 "Wrote" = "Записано";
 "Wrote %@" = "Записано %@";
 "You:" = "Ви:";
-"New session" = "Нова сесія";
-"Home folder" = "Домашня тека";
+"New chat" = "Новий чат";
+"Working folder" = "Робоча тека";
+"Start in Terminal" = "Запустити в Терміналі";
+"Change" = "Змінити";
 "Choose project folder" = "Виберіть теку проєкту";

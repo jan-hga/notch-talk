@@ -1,26 +1,21 @@
 //
-//  NewSessionRow.swift
+//  NewChatRow.swift
 //  ClaudeIsland
 //
-//  Row that starts a new Claude Code session in a chosen folder
+//  "New chat" row: the working folder is chosen once, and the terminal only
+//  opens when the user presses the start button.
 //
 
 import AppKit
 import SwiftUI
 
-struct NewSessionRow: View {
-    /// Folders of existing sessions, most recent first
-    let recentDirectories: [String]
-
+struct NewChatRow: View {
+    @AppStorage("workingDirectory") private var workingDirectory: String = ""
     @State private var isExpanded = false
     @State private var isHovered = false
 
-    private var shownDirectories: [String] {
-        var seen = Set<String>()
-        return recentDirectories
-            .filter { seen.insert($0).inserted }
-            .prefix(4)
-            .map { $0 }
+    private var hasFolder: Bool {
+        !workingDirectory.isEmpty && FileManager.default.fileExists(atPath: workingDirectory)
     }
 
     var body: some View {
@@ -36,7 +31,7 @@ struct NewSessionRow: View {
                         .foregroundColor(textColor)
                         .frame(width: 16)
 
-                    Text(L10n.tr("New session"))
+                    Text(L10n.tr("New chat"))
                         .font(.system(size: 13, weight: .medium))
                         .foregroundColor(textColor)
 
@@ -57,21 +52,22 @@ struct NewSessionRow: View {
             .onHover { isHovered = $0 }
 
             if isExpanded {
-                VStack(spacing: 2) {
-                    ForEach(shownDirectories, id: \.self) { directory in
-                        NewSessionOption(label: displayName(for: directory), sublabel: shortened(directory)) {
-                            start(in: directory)
+                VStack(alignment: .leading, spacing: 8) {
+                    if hasFolder {
+                        folderLine
+                        ChatActionButton(title: L10n.tr("Start in Terminal"), isPrimary: true) {
+                            Task { _ = await TerminalLauncher.startClaude(in: workingDirectory) }
                         }
-                    }
-                    NewSessionOption(label: L10n.tr("Home folder"), sublabel: "~") {
-                        start(in: NSHomeDirectory())
-                    }
-                    NewSessionOption(label: L10n.tr("Choose folder…"), sublabel: nil) {
-                        chooseFolder()
+                    } else {
+                        ChatActionButton(title: L10n.tr("Choose folder…"), isPrimary: true) {
+                            chooseFolder()
+                        }
                     }
                 }
                 .padding(.leading, 28)
+                .padding(.trailing, 12)
                 .padding(.top, 4)
+                .padding(.bottom, 4)
             }
         }
     }
@@ -80,22 +76,33 @@ struct NewSessionRow: View {
         .white.opacity(isHovered ? 1.0 : 0.7)
     }
 
-    private func displayName(for directory: String) -> String {
-        URL(fileURLWithPath: directory).lastPathComponent
+    private var folderLine: some View {
+        HStack(spacing: 8) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(L10n.tr("Working folder"))
+                    .font(.system(size: 10))
+                    .foregroundColor(.white.opacity(0.35))
+                Text(shortened(workingDirectory))
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.white.opacity(0.75))
+                    .lineLimit(1)
+                    .truncationMode(.head)
+            }
+            Spacer()
+            Button {
+                chooseFolder()
+            } label: {
+                Text(L10n.tr("Change"))
+                    .font(.system(size: 11))
+                    .foregroundColor(.white.opacity(0.5))
+            }
+            .buttonStyle(.plain)
+        }
     }
 
     private func shortened(_ path: String) -> String {
         let home = NSHomeDirectory()
         return path.hasPrefix(home) ? "~" + path.dropFirst(home.count) : path
-    }
-
-    private func start(in directory: String) {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            isExpanded = false
-        }
-        Task {
-            _ = await TerminalLauncher.startClaude(in: directory)
-        }
     }
 
     private func chooseFolder() {
@@ -104,7 +111,7 @@ struct NewSessionRow: View {
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
-        panel.directoryURL = URL(fileURLWithPath: NSHomeDirectory())
+        panel.directoryURL = URL(fileURLWithPath: hasFolder ? workingDirectory : NSHomeDirectory())
 
         // The notch sits above normal windows and would cover the picker
         let notchWindow = NSApp.windows.first { $0 is NotchPanel }
@@ -119,44 +126,25 @@ struct NewSessionRow: View {
         notchWindow?.ignoresMouseEvents = wasIgnoring
 
         if response == .OK, let url = panel.url {
-            start(in: url.path)
+            workingDirectory = url.path
         }
     }
 }
 
-private struct NewSessionOption: View {
-    let label: String
-    let sublabel: String?
+private struct ChatActionButton: View {
+    let title: String
+    let isPrimary: Bool
     let action: () -> Void
-
-    @State private var isHovered = false
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 8) {
-                Text(label)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.white.opacity(isHovered ? 1.0 : 0.7))
-                    .lineLimit(1)
-
-                Spacer()
-
-                if let sublabel {
-                    Text(sublabel)
-                        .font(.system(size: 10))
-                        .foregroundColor(.white.opacity(0.3))
-                        .lineLimit(1)
-                        .truncationMode(.head)
-                }
-            }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(isHovered ? Color.white.opacity(0.06) : Color.clear)
-            )
+            Text(title)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(isPrimary ? .black : .white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(Capsule().fill(Color.white.opacity(isPrimary ? 0.95 : 0.1)))
         }
         .buttonStyle(.plain)
-        .onHover { isHovered = $0 }
     }
 }

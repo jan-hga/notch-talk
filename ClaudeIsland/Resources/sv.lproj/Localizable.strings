@@ -93,6 +93,8 @@
 "Wrote" = "Skrivet";
 "Wrote %@" = "%@ skrivet";
 "You:" = "Du:";
-"New session" = "Ny session";
-"Home folder" = "Hemmapp";
+"New chat" = "Ny chatt";
+"Working folder" = "Arbetsmapp";
+"Start in Terminal" = "Starta i Terminal";
+"Change" = "Ändra";
 "Choose project folder" = "Välj projektmapp";

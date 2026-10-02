@@ -93,6 +93,8 @@
 "Wrote" = "Zapsáno";
 "Wrote %@" = "Zapsáno: %@";
 "You:" = "Vy:";
-"New session" = "Nová relace";
-"Home folder" = "Domovská složka";
+"New chat" = "Nový chat";
+"Working folder" = "Pracovní složka";
+"Start in Terminal" = "Spustit v Terminálu";
+"Change" = "Změnit";
 "Choose project folder" = "Vyberte složku projektu";

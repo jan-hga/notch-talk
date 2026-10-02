@@ -93,6 +93,8 @@
 "Wrote" = "Scritto";
 "Wrote %@" = "%@ scritto";
 "You:" = "Tu:";
-"New session" = "Nuova sessione";
-"Home folder" = "Cartella Home";
+"New chat" = "Nuova chat";
+"Working folder" = "Cartella di lavoro";
+"Start in Terminal" = "Avvia nel Terminale";
+"Change" = "Cambia";
 "Choose project folder" = "Scegli la cartella del progetto";

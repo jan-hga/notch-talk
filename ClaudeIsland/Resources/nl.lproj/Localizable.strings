@@ -93,6 +93,8 @@
 "Wrote" = "Geschreven";
 "Wrote %@" = "%@ geschreven";
 "You:" = "Jij:";
-"New session" = "Nieuwe sessie";
-"Home folder" = "Thuismap";
+"New chat" = "Nieuwe chat";
+"Working folder" = "Werkmap";
+"Start in Terminal" = "Starten in Terminal";
+"Change" = "Wijzigen";
 "Choose project folder" = "Kies projectmap";

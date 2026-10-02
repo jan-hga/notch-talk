@@ -93,6 +93,8 @@
 "Wrote" = "Zapisano";
 "Wrote %@" = "Zapisano %@";
 "You:" = "Ty:";
-"New session" = "Nowa sesja";
-"Home folder" = "Folder domowy";
+"New chat" = "Nowy czat";
+"Working folder" = "Folder roboczy";
+"Start in Terminal" = "Uruchom w Terminalu";
+"Change" = "Zmień";
 "Choose project folder" = "Wybierz folder projektu";

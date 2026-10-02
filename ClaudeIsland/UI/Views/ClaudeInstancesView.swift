@@ -32,7 +32,7 @@ struct ClaudeInstancesView: View {
                 .font(.system(size: 11))
                 .foregroundColor(.white.opacity(0.25))
 
-            NewSessionRow(recentDirectories: [])
+            NewChatRow()
                 .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -83,7 +83,7 @@ struct ClaudeInstancesView: View {
                     .id(session.stableId)
                 }
 
-                NewSessionRow(recentDirectories: sortedInstances.map(\.cwd))
+                NewChatRow()
             }
             .padding(.vertical, 4)
         }

@@ -93,6 +93,8 @@
 "Wrote" = "已寫入";
 "Wrote %@" = "已寫入 %@";
 "You:" = "你：";
-"New session" = "新工作階段";
-"Home folder" = "個人資料夾";
+"New chat" = "新聊天";
+"Working folder" = "工作資料夾";
+"Start in Terminal" = "在終端機中啟動";
+"Change" = "更改";
 "Choose project folder" = "選擇專案資料夾";
