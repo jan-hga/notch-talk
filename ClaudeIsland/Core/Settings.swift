@@ -39,6 +39,7 @@ enum AppSettings {
     private enum Keys {
         static let notificationSound = "notificationSound"
         static let claudeDirectoryName = "claudeDirectoryName"
+        static let language = "appLanguage"
     }
 
     // MARK: - Notification Sound
@@ -69,6 +70,18 @@ enum AppSettings {
         }
         set {
             defaults.set(newValue.trimmingCharacters(in: .whitespaces), forKey: Keys.claudeDirectoryName)
+        }
+    }
+
+    // MARK: - Language
+
+    /// UI language; `.system` follows the macOS language list
+    nonisolated static var language: AppLanguage {
+        get {
+            UserDefaults.standard.string(forKey: Keys.language).flatMap(AppLanguage.init(rawValue:)) ?? .system
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: Keys.language)
         }
     }
 }

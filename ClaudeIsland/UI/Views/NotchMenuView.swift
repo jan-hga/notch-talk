@@ -29,7 +29,7 @@ struct NotchMenuView: View {
                 // Back button
                 MenuRow(
                     icon: "chevron.left",
-                    label: "Back"
+                    label: L10n.tr("Back")
                 ) {
                     viewModel.toggleMenu()
                 }
@@ -42,6 +42,7 @@ struct NotchMenuView: View {
                 ScreenPickerRow(screenSelector: screenSelector)
                 SoundPickerRow(soundSelector: soundSelector)
                 ClaudeDirPickerRow()
+                LanguagePickerRow()
 
                 Divider()
                     .background(Color.white.opacity(0.08))
@@ -50,7 +51,7 @@ struct NotchMenuView: View {
                 // System settings
                 MenuToggleRow(
                     icon: "power",
-                    label: "Launch at Login",
+                    label: L10n.tr("Launch at Login"),
                     isOn: launchAtLogin
                 ) {
                     do {
@@ -95,7 +96,7 @@ struct NotchMenuView: View {
 
                 MenuRow(
                     icon: "xmark.circle",
-                    label: "Quit",
+                    label: L10n.tr("Quit"),
                     isDestructive: true
                 ) {
                     NSApplication.shared.terminate(nil)
@@ -195,7 +196,7 @@ struct UpdateRow: View {
                 Image(systemName: "checkmark")
                     .font(.system(size: 9, weight: .bold))
                     .foregroundColor(TerminalColors.green)
-                Text("Up to date")
+                Text(L10n.tr("Up to date"))
                     .font(.system(size: 11))
                     .foregroundColor(TerminalColors.green)
             }
@@ -248,7 +249,7 @@ struct UpdateRow: View {
             }
 
         case .error:
-            Text("Retry")
+            Text(L10n.tr("Retry"))
                 .font(.system(size: 11))
                 .foregroundColor(.white.opacity(0.5))
         }
@@ -303,23 +304,23 @@ struct UpdateRow: View {
     private var label: String {
         switch updateManager.state {
         case .idle:
-            return "Check for Updates"
+            return L10n.tr("Check for Updates")
         case .checking:
-            return "Checking..."
+            return L10n.tr("Checking...")
         case .upToDate:
-            return "Check for Updates"
+            return L10n.tr("Check for Updates")
         case .found:
-            return "Download Update"
+            return L10n.tr("Download Update")
         case .downloading:
-            return "Downloading..."
+            return L10n.tr("Downloading...")
         case .extracting:
-            return "Extracting..."
+            return L10n.tr("Extracting...")
         case .readyToInstall:
-            return "Install & Relaunch"
+            return L10n.tr("Install & Relaunch")
         case .installing:
-            return "Installing..."
+            return L10n.tr("Installing...")
         case .error:
-            return "Update failed"
+            return L10n.tr("Update failed")
         }
     }
 
@@ -382,7 +383,7 @@ struct AccessibilityRow: View {
                 .foregroundColor(textColor)
                 .frame(width: 16)
 
-            Text("Accessibility")
+            Text(L10n.tr("Accessibility"))
                 .font(.system(size: 13, weight: .medium))
                 .foregroundColor(textColor)
 
@@ -393,12 +394,12 @@ struct AccessibilityRow: View {
                     .fill(TerminalColors.green)
                     .frame(width: 6, height: 6)
 
-                Text("On")
+                Text(L10n.tr("On"))
                     .font(.system(size: 11))
                     .foregroundColor(.white.opacity(0.4))
             } else {
                 Button(action: openAccessibilitySettings) {
-                    Text("Enable")
+                    Text(L10n.tr("Enable"))
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundColor(.black)
                         .padding(.horizontal, 10)
@@ -502,7 +503,7 @@ struct MenuToggleRow: View {
                     .fill(isOn ? TerminalColors.green : Color.white.opacity(0.3))
                     .frame(width: 6, height: 6)
 
-                Text(isOn ? "On" : "Off")
+                Text(isOn ? L10n.tr("On") : L10n.tr("Off"))
                     .font(.system(size: 11))
                     .foregroundColor(.white.opacity(0.4))
             }

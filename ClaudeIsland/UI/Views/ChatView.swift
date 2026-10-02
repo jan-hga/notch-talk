@@ -250,7 +250,7 @@ struct ChatView: View {
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: .white.opacity(0.4)))
                 .scaleEffect(0.8)
-            Text("Loading messages...")
+            Text(L10n.tr("Loading messages..."))
                 .font(.system(size: 13, weight: .medium))
                 .foregroundColor(.white.opacity(0.4))
         }
@@ -264,7 +264,7 @@ struct ChatView: View {
             Image(systemName: "bubble.left.and.bubble.right")
                 .font(.system(size: 24))
                 .foregroundColor(.white.opacity(0.2))
-            Text("No messages yet")
+            Text(L10n.tr("No messages yet"))
                 .font(.system(size: 13, weight: .medium))
                 .foregroundColor(.white.opacity(0.4))
         }
@@ -385,14 +385,14 @@ struct ChatView: View {
     /// Sessions started by the Claude desktop app have no terminal to type into
     private var openInClaudeBar: some View {
         HStack(spacing: 10) {
-            Text("This session runs in the Claude app")
+            Text(L10n.tr("This session runs in the Claude app"))
                 .font(.system(size: 13))
                 .foregroundColor(.white.opacity(0.5))
             Spacer()
             Button {
                 TerminalMessageSender.openClaudeDesktop()
             } label: {
-                Text("Open in Claude")
+                Text(L10n.tr("Open in Claude"))
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.black)
                     .padding(.horizontal, 14)
@@ -409,7 +409,7 @@ struct ChatView: View {
 
     private var messageField: some View {
         HStack(spacing: 10) {
-            TextField(canSendMessages ? "Message Claude..." : "Messaging works in Terminal, iTerm2 or tmux", text: $inputText)
+            TextField(canSendMessages ? L10n.tr("Message Claude...") : L10n.tr("Messaging works in Terminal, iTerm2 or tmux"), text: $inputText)
                 .textFieldStyle(.plain)
                 .font(.system(size: 13))
                 .foregroundColor(canSendMessages ? .white : .white.opacity(0.4))
@@ -585,7 +585,7 @@ struct ImageMessageView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "photo")
                         .font(.system(size: 12))
-                    Text("Image (\(image.mediaType))")
+                    Text(L10n.tr("Image (%@)", image.mediaType))
                         .font(.system(size: 12))
                 }
                 .foregroundColor(.white.opacity(0.5))
@@ -658,7 +658,7 @@ struct AssistantMessageView: View {
 // MARK: - Processing Indicator
 
 struct ProcessingIndicatorView: View {
-    private let baseTexts = ["Processing", "Working"]
+    private let baseTexts = [L10n.tr("Processing"), L10n.tr("Working")]
     private let color = Color(red: 0.85, green: 0.47, blue: 0.34) // Claude orange
     private let baseText: String
 
@@ -771,7 +771,7 @@ struct ToolCallView: View {
                     .fixedSize()
 
                 if tool.isSubagentContainer && !tool.subagentTools.isEmpty {
-                    let taskDesc = tool.input["description"] ?? "Running agent..."
+                    let taskDesc = tool.input["description"] ?? L10n.tr("Running agent...")
                     Text("\(taskDesc) (\(tool.subagentTools.count) tools)")
                         .font(.system(size: 11))
                         .foregroundColor(textColor.opacity(0.7))
@@ -779,7 +779,7 @@ struct ToolCallView: View {
                         .truncationMode(.tail)
                 } else if tool.name == "AgentOutputTool", let desc = agentDescription {
                     let blocking = tool.input["block"] == "true"
-                    Text(blocking ? "Waiting: \(desc)" : desc)
+                    Text(blocking ? L10n.tr("Waiting: %@", desc) : desc)
                         .font(.system(size: 11))
                         .foregroundColor(textColor.opacity(0.7))
                         .lineLimit(1)
@@ -913,7 +913,7 @@ struct SubagentToolRow: View {
     /// Get status text using the same logic as regular tools
     private var statusText: String {
         if tool.status == .interrupted {
-            return "Interrupted"
+            return L10n.tr("Interrupted")
         } else if tool.status == .running {
             return ToolStatusDisplay.running(for: tool.name, input: tool.input).text
         } else {
@@ -967,7 +967,7 @@ struct SubagentToolsSummary: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Subagent used \(tools.count) tools:")
+            Text(L10n.tr("Subagent used %d tools:", tools.count))
                 .font(.system(size: 10, weight: .medium))
                 .foregroundColor(.white.opacity(0.5))
 
@@ -1052,7 +1052,7 @@ struct ThinkingView: View {
 struct InterruptedMessageView: View {
     var body: some View {
         HStack {
-            Text("Interrupted")
+            Text(L10n.tr("Interrupted"))
                 .font(.system(size: 13))
                 .foregroundColor(.red)
             Spacer()
@@ -1077,7 +1077,7 @@ struct ChatInteractivePromptBar: View {
                 Text(MCPToolFormatter.formatToolName("AskUserQuestion"))
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
                     .foregroundColor(TerminalColors.amber)
-                Text("Claude Code needs your input")
+                Text(L10n.tr("Claude Code needs your input"))
                     .font(.system(size: 11))
                     .foregroundColor(.white.opacity(0.5))
                     .lineLimit(1)
@@ -1160,7 +1160,7 @@ struct ChatApprovalBar: View {
             Button {
                 onDeny()
             } label: {
-                Text("Deny")
+                Text(L10n.tr("Deny"))
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.white.opacity(0.7))
                     .padding(.horizontal, 16)
@@ -1176,7 +1176,7 @@ struct ChatApprovalBar: View {
             Button {
                 onApprove()
             } label: {
-                Text("Allow")
+                Text(L10n.tr("Allow"))
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.black)
                     .padding(.horizontal, 16)

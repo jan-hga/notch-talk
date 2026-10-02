@@ -272,84 +272,84 @@ struct ToolStatusDisplay {
     static func running(for toolName: String, input: [String: String]) -> ToolStatusDisplay {
         switch toolName {
         case "Read":
-            return ToolStatusDisplay(text: "Reading...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Reading..."), isRunning: true)
         case "Edit":
-            return ToolStatusDisplay(text: "Editing...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Editing..."), isRunning: true)
         case "Write":
-            return ToolStatusDisplay(text: "Writing...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Writing..."), isRunning: true)
         case "Bash":
             if let desc = input["description"], !desc.isEmpty {
                 return ToolStatusDisplay(text: desc, isRunning: true)
             }
-            return ToolStatusDisplay(text: "Running...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Running..."), isRunning: true)
         case "Grep", "Glob":
             if let pattern = input["pattern"] {
-                return ToolStatusDisplay(text: "Searching: \(pattern)", isRunning: true)
+                return ToolStatusDisplay(text: L10n.tr("Searching: %@", pattern), isRunning: true)
             }
-            return ToolStatusDisplay(text: "Searching...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Searching..."), isRunning: true)
         case "WebSearch":
             if let query = input["query"] {
-                return ToolStatusDisplay(text: "Searching: \(query)", isRunning: true)
+                return ToolStatusDisplay(text: L10n.tr("Searching: %@", query), isRunning: true)
             }
-            return ToolStatusDisplay(text: "Searching...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Searching..."), isRunning: true)
         case "WebFetch":
-            return ToolStatusDisplay(text: "Fetching...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Fetching..."), isRunning: true)
         case "Task", "Agent":
             if let desc = input["description"], !desc.isEmpty {
                 return ToolStatusDisplay(text: desc, isRunning: true)
             }
-            return ToolStatusDisplay(text: "Running agent...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Running agent..."), isRunning: true)
         case "TodoWrite":
-            return ToolStatusDisplay(text: "Updating todos...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Updating todos..."), isRunning: true)
         case "EnterPlanMode":
-            return ToolStatusDisplay(text: "Entering plan mode...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Entering plan mode..."), isRunning: true)
         case "ExitPlanMode":
-            return ToolStatusDisplay(text: "Exiting plan mode...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Exiting plan mode..."), isRunning: true)
         default:
-            return ToolStatusDisplay(text: "Running...", isRunning: true)
+            return ToolStatusDisplay(text: L10n.tr("Running..."), isRunning: true)
         }
     }
 
     /// Get completed status text for a tool result
     static func completed(for toolName: String, result: ToolResultData?) -> ToolStatusDisplay {
         guard let result = result else {
-            return ToolStatusDisplay(text: "Completed", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Completed"), isRunning: false)
         }
 
         switch result {
         case .read(let r):
-            let lineText = r.totalLines > r.numLines ? "\(r.numLines)+ lines" : "\(r.numLines) lines"
-            return ToolStatusDisplay(text: "Read \(r.filename) (\(lineText))", isRunning: false)
+            let lineText = r.totalLines > r.numLines ? L10n.tr("%d+ lines", r.numLines) : L10n.tr("%d lines", r.numLines)
+            return ToolStatusDisplay(text: L10n.tr("Read %1$@ (%2$@)", r.filename, lineText), isRunning: false)
 
         case .edit(let r):
-            return ToolStatusDisplay(text: "Edited \(r.filename)", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Edited %@", r.filename), isRunning: false)
 
         case .write(let r):
-            let action = r.type == .create ? "Created" : "Wrote"
-            return ToolStatusDisplay(text: "\(action) \(r.filename)", isRunning: false)
+            let text = r.type == .create ? L10n.tr("Created %@", r.filename) : L10n.tr("Wrote %@", r.filename)
+            return ToolStatusDisplay(text: text, isRunning: false)
 
         case .bash(let r):
             if let bgId = r.backgroundTaskId {
-                return ToolStatusDisplay(text: "Running in background (\(bgId))", isRunning: false)
+                return ToolStatusDisplay(text: L10n.tr("Running in background (%@)", "\(bgId)"), isRunning: false)
             }
             if let interpretation = r.returnCodeInterpretation {
                 return ToolStatusDisplay(text: interpretation, isRunning: false)
             }
-            return ToolStatusDisplay(text: "Completed", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Completed"), isRunning: false)
 
         case .grep(let r):
-            let fileWord = r.numFiles == 1 ? "file" : "files"
-            return ToolStatusDisplay(text: "Found \(r.numFiles) \(fileWord)", isRunning: false)
+            let found = r.numFiles == 1 ? L10n.tr("Found %d file", r.numFiles) : L10n.tr("Found %d files", r.numFiles)
+            return ToolStatusDisplay(text: found, isRunning: false)
 
         case .glob(let r):
-            let fileWord = r.numFiles == 1 ? "file" : "files"
             if r.numFiles == 0 {
-                return ToolStatusDisplay(text: "No files found", isRunning: false)
+                return ToolStatusDisplay(text: L10n.tr("No files found"), isRunning: false)
             }
-            return ToolStatusDisplay(text: "Found \(r.numFiles) \(fileWord)", isRunning: false)
+            let found = r.numFiles == 1 ? L10n.tr("Found %d file", r.numFiles) : L10n.tr("Found %d files", r.numFiles)
+            return ToolStatusDisplay(text: found, isRunning: false)
 
         case .todoWrite:
-            return ToolStatusDisplay(text: "Updated todos", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Updated todos"), isRunning: false)
 
         case .task(let r):
             return ToolStatusDisplay(text: r.status.capitalized, isRunning: false)
@@ -361,26 +361,25 @@ struct ToolStatusDisplay {
             let time = r.durationSeconds >= 1 ?
                 "\(Int(r.durationSeconds))s" :
                 "\(Int(r.durationSeconds * 1000))ms"
-            let searchWord = r.results.count == 1 ? "search" : "searches"
-            return ToolStatusDisplay(text: "Did 1 \(searchWord) in \(time)", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Did 1 search in %@", time), isRunning: false)
 
         case .askUserQuestion:
-            return ToolStatusDisplay(text: "Answered", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Answered"), isRunning: false)
 
         case .bashOutput(let r):
-            return ToolStatusDisplay(text: "Status: \(r.status)", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Status: %@", "\(r.status)"), isRunning: false)
 
         case .killShell:
-            return ToolStatusDisplay(text: "Terminated", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Terminated"), isRunning: false)
 
         case .exitPlanMode:
-            return ToolStatusDisplay(text: "Plan ready", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Plan ready"), isRunning: false)
 
         case .mcp:
-            return ToolStatusDisplay(text: "Completed", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Completed"), isRunning: false)
 
         case .generic:
-            return ToolStatusDisplay(text: "Completed", isRunning: false)
+            return ToolStatusDisplay(text: L10n.tr("Completed"), isRunning: false)
         }
     }
 }

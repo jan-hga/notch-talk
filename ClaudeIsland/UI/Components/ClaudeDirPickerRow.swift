@@ -32,7 +32,7 @@ struct ClaudeDirPickerRow: View {
                         .foregroundColor(textColor)
                         .frame(width: 16)
 
-                    Text("Claude Directory")
+                    Text(L10n.tr("Claude Directory"))
                         .font(.system(size: 13, weight: .medium))
                         .foregroundColor(textColor)
 
@@ -62,7 +62,7 @@ struct ClaudeDirPickerRow: View {
             if isExpanded {
                 VStack(spacing: 2) {
                     ClaudeDirOptionRow(
-                        label: "Auto-detect",
+                        label: L10n.tr("Auto-detect"),
                         sublabel: isCustom ? nil : resolvedAutoDetectPath,
                         isSelected: !isCustom
                     ) {
@@ -70,7 +70,7 @@ struct ClaudeDirPickerRow: View {
                     }
 
                     ClaudeDirOptionRow(
-                        label: "Choose folder…",
+                        label: L10n.tr("Choose folder…"),
                         sublabel: isCustom ? displayValue : nil,
                         isSelected: isCustom
                     ) {
@@ -96,7 +96,7 @@ struct ClaudeDirPickerRow: View {
 
     /// Short display string for the main row's right side.
     private var displayValue: String {
-        isCustom ? shortenedPath(currentValue) : "Auto-detect"
+        isCustom ? shortenedPath(currentValue) : L10n.tr("Auto-detect")
     }
 
     /// What `Auto-detect` actually resolves to right now (for the sublabel).
@@ -118,8 +118,8 @@ struct ClaudeDirPickerRow: View {
 
     private func openFolderPicker() {
         let panel = NSOpenPanel()
-        panel.title = "Choose Claude Config Directory"
-        panel.message = "Select the folder Claude Code uses (typically ~/.claude or ~/.config/claude)."
+        panel.title = L10n.tr("Choose Claude Config Directory")
+        panel.message = L10n.tr("Select the folder Claude Code uses (typically ~/.claude or ~/.config/claude).")
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false

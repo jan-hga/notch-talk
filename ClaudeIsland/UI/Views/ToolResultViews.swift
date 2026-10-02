@@ -155,7 +155,7 @@ struct WriteResultContent: View {
         VStack(alignment: .leading, spacing: 6) {
             // Action and filename
             HStack(spacing: 4) {
-                Text(result.type == .create ? "Created" : "Wrote")
+                Text(result.type == .create ? L10n.tr("Created") : L10n.tr("Wrote"))
                     .font(.system(size: 11, design: .monospaced))
                     .foregroundColor(.white.opacity(0.5))
                 Text(result.filename)
@@ -185,7 +185,7 @@ struct BashResultContent: View {
                 HStack(spacing: 4) {
                     Image(systemName: "clock.arrow.circlepath")
                         .font(.system(size: 10))
-                    Text("Background task: \(bgId)")
+                    Text(L10n.tr("Background task: %@", "\(bgId)"))
                         .font(.system(size: 10, design: .monospaced))
                 }
                 .foregroundColor(.blue.opacity(0.7))
@@ -237,7 +237,7 @@ struct GrepResultContent: View {
             case .filesWithMatches:
                 // Show file list
                 if result.filenames.isEmpty {
-                    Text("No matches found")
+                    Text(L10n.tr("No matches found"))
                         .font(.system(size: 11, design: .monospaced))
                         .foregroundColor(.white.opacity(0.3))
                 } else {
@@ -249,7 +249,7 @@ struct GrepResultContent: View {
                 if let content = result.content, !content.isEmpty {
                     CodePreview(content: content, maxLines: 15)
                 } else {
-                    Text("No matches found")
+                    Text(L10n.tr("No matches found"))
                         .font(.system(size: 11, design: .monospaced))
                         .foregroundColor(.white.opacity(0.3))
                 }
@@ -271,7 +271,7 @@ struct GlobResultContent: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             if result.filenames.isEmpty {
-                Text("No files found")
+                Text(L10n.tr("No files found"))
                     .font(.system(size: 11, design: .monospaced))
                     .foregroundColor(.white.opacity(0.3))
             } else {
@@ -429,7 +429,7 @@ struct WebSearchResultContent: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             if result.results.isEmpty {
-                Text("No results found")
+                Text(L10n.tr("No results found"))
                     .font(.system(size: 11, design: .monospaced))
                     .foregroundColor(.white.opacity(0.3))
             } else {
@@ -498,12 +498,12 @@ struct BashOutputResultContent: View {
         VStack(alignment: .leading, spacing: 4) {
             // Status
             HStack(spacing: 6) {
-                Text("Status: \(result.status)")
+                Text(L10n.tr("Status: %@", "\(result.status)"))
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundColor(.white.opacity(0.5))
 
                 if let exitCode = result.exitCode {
-                    Text("Exit: \(exitCode)")
+                    Text(L10n.tr("Exit: %@", "\(exitCode)"))
                         .font(.system(size: 10, design: .monospaced))
                         .foregroundColor(exitCode == 0 ? .green.opacity(0.6) : .red.opacity(0.6))
                 }
@@ -535,7 +535,7 @@ struct KillShellResultContent: View {
                 .font(.system(size: 11))
                 .foregroundColor(.red.opacity(0.6))
 
-            Text(result.message.isEmpty ? "Shell \(result.shellId) terminated" : result.message)
+            Text(result.message.isEmpty ? L10n.tr("Shell %@ terminated", "\(result.shellId)") : result.message)
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundColor(.white.opacity(0.5))
         }
@@ -610,7 +610,7 @@ struct GenericResultContent: View {
         if let content = result.rawContent, !content.isEmpty {
             GenericTextContent(text: content)
         } else {
-            Text("Completed")
+            Text(L10n.tr("Completed"))
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundColor(.white.opacity(0.3))
         }

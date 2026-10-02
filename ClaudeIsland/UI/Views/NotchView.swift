@@ -25,6 +25,7 @@ struct NotchView: View {
     @State private var waitingForInputTimestamps: [String: Date] = [:]  // sessionId -> when it entered waitingForInput
     @State private var isVisible: Bool = false
     @State private var isHovering: Bool = false
+    @AppStorage("appLanguage") private var appLanguage: String = "system"
     @State private var isBouncing: Bool = false
 
     @Namespace private var activityNamespace
@@ -138,6 +139,7 @@ struct NotchView: View {
             // Outer container does NOT receive hits - only the notch content does
             VStack(spacing: 0) {
                 notchLayout
+                    .id(appLanguage)  // rebuild all text when the language changes
                     .frame(
                         maxWidth: viewModel.status == .opened ? notchSize.width : nil,
                         alignment: .top

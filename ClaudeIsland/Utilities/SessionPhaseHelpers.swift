@@ -28,17 +28,17 @@ struct SessionPhaseHelpers {
     static func phaseDescription(for phase: SessionPhase) -> String {
         switch phase {
         case .waitingForApproval(let ctx):
-            return "Waiting for approval: \(ctx.toolName)"
+            return L10n.tr("Waiting for approval: %@", ctx.toolName)
         case .waitingForInput:
-            return "Ready for input"
+            return L10n.tr("Ready for input")
         case .processing:
-            return "Processing..."
+            return L10n.tr("Processing...")
         case .compacting:
-            return "Compacting context..."
+            return L10n.tr("Compacting context...")
         case .idle:
-            return "Idle"
+            return L10n.tr("Idle")
         case .ended:
-            return "Ended"
+            return L10n.tr("Ended")
         }
     }
 
