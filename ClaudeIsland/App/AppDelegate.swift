@@ -67,6 +67,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        BackgroundChats.shared.terminateAll()
         updateCheckTimer?.invalidate()
         screenObserver = nil
     }

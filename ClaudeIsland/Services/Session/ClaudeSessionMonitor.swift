@@ -123,6 +123,7 @@ class ClaudeSessionMonitor: ObservableObject {
 
     /// Archive (remove) a session from the instances list
     func archiveSession(sessionId: String) {
+        BackgroundChats.shared.stop(sessionId: sessionId)
         Task {
             await SessionStore.shared.process(.sessionEnded(sessionId: sessionId))
         }

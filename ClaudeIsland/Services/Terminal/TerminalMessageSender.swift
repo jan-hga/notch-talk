@@ -37,6 +37,9 @@ actor TerminalMessageSender {
 
     /// Runs `ps`, so call it off the main thread and cache the result
     nonisolated static func support(for session: SessionState) -> Support {
+        // Chats this app started itself run without a terminal and take messages directly
+        if BackgroundChatRegistry.contains(session.sessionId) { return .available }
+
         guard let pid = session.pid else { return .unavailable }
         let tree = ProcessTreeBuilder.shared.buildTree()
 
@@ -70,6 +73,10 @@ actor TerminalMessageSender {
 
     /// Send text (followed by Enter) to the session's terminal
     func send(_ text: String, to session: SessionState) async -> Bool {
+        if BackgroundChatRegistry.contains(session.sessionId) {
+            return await MainActor.run { BackgroundChats.shared.send(text, to: session.sessionId) }
+        }
+
         guard let route = await route(for: session) else {
             Self.logger.error("No route to terminal for session")
             return false

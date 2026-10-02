@@ -95,3 +95,4 @@
 "You:" = "Ви:";
 "Starting..." = "Запуск...";
 "Choose project folder" = "Виберіть теку проєкту";
+"Couldn't start Claude" = "Не вдалося запустити Claude";

@@ -95,3 +95,4 @@
 "You:" = "Vous :";
 "Starting..." = "Démarrage...";
 "Choose project folder" = "Choisir le dossier du projet";
+"Couldn't start Claude" = "Impossible de démarrer Claude";

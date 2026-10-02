@@ -3,7 +3,8 @@
 //  ClaudeIsland
 //
 //  Empty chat for a new conversation. The workspace (folder) sits at the top
-//  and can be changed; the terminal opens when the first message is sent.
+//  and can be changed. The first message starts Claude in the background,
+//  no terminal window involved.
 //
 
 import AppKit
@@ -17,8 +18,8 @@ struct NewChatView: View {
     @AppStorage("workingDirectory") private var storedDirectory: String = ""
     @State private var text = ""
     @State private var isStarting = false
-    @State private var knownSessionIds: Set<String> = []
-    @State private var launchedAt = Date.distantPast
+    @State private var failed = false
+    @State private var startedSessionId: String?
     @FocusState private var isInputFocused: Bool
 
     private var workspace: String {
@@ -35,6 +36,12 @@ struct NewChatView: View {
             if isStarting {
                 startingBar
             } else {
+                if failed {
+                    Text(L10n.tr("Couldn't start Claude"))
+                        .font(.system(size: 12))
+                        .foregroundColor(.red.opacity(0.8))
+                        .padding(.bottom, 6)
+                }
                 inputBar
             }
         }
@@ -44,15 +51,9 @@ struct NewChatView: View {
             }
         }
         .onReceive(sessionMonitor.$instances) { sessions in
-            guard isStarting else { return }
-            let target = Self.canonical(workspace)
-            if let created = sessions.first(where: {
-                !knownSessionIds.contains($0.sessionId)
-                    && Self.canonical($0.cwd) == target
-                    && $0.createdAt >= launchedAt.addingTimeInterval(-1)
-            }) {
-                viewModel.showChat(for: created)
-            }
+            guard let sessionId = startedSessionId,
+                  let created = sessions.first(where: { $0.sessionId == sessionId }) else { return }
+            viewModel.showChat(for: created)
         }
     }
 
@@ -142,16 +143,23 @@ struct NewChatView: View {
         let message = trimmed
         guard !message.isEmpty, !isStarting else { return }
 
-        knownSessionIds = Set(sessionMonitor.instances.map(\.sessionId))
-        launchedAt = Date()
+        failed = false
+
+        guard let sessionId = BackgroundChats.shared.start(cwd: workspace, firstMessage: message) else {
+            failed = true
+            return
+        }
+        startedSessionId = sessionId
         isStarting = true
 
-        let directory = workspace
+        // The session reports through the hooks; if it never shows up, let the user retry
         Task {
-            let started = await TerminalLauncher.startClaude(in: directory, prompt: message)
-            if !started {
-                // Terminal could not be opened: let the user try again
+            try? await Task.sleep(for: .seconds(30))
+            if isStarting && viewModel.contentType == .newChat {
+                BackgroundChats.shared.stop(sessionId: sessionId)
+                startedSessionId = nil
                 isStarting = false
+                failed = true
             }
         }
     }
@@ -182,9 +190,6 @@ struct NewChatView: View {
         return path.hasPrefix(home) ? "~" + path.dropFirst(home.count) : path
     }
 
-    private static func canonical(_ path: String) -> String {
-        URL(fileURLWithPath: path).resolvingSymlinksInPath().path
-    }
 }
 
 /// Folder name with a chevron; pressing it opens the folder picker

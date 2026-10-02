@@ -95,3 +95,4 @@
 "You:" = "Vy:";
 "Starting..." = "Spouštění...";
 "Choose project folder" = "Vyberte složku projektu";
+"Couldn't start Claude" = "Claude se nepodařilo spustit";
