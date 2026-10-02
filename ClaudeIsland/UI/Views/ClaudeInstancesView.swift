@@ -183,6 +183,10 @@ struct InstanceRow: View {
                             .font(.system(size: 10, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.3))
                     }
+
+                    if session.phase.isWorking, let startedAt = session.workStartedAt {
+                        WorkTimerText(since: startedAt)
+                    }
                 }
 
                 // Show tool call when waiting for approval, otherwise last activity

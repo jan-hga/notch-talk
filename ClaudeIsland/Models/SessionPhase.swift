@@ -82,6 +82,16 @@ enum SessionPhase: Sendable {
     /// Session has ended
     case ended
 
+    /// Claude is busy: processing, compacting, or waiting on a permission mid-turn
+    nonisolated var isWorking: Bool {
+        switch self {
+        case .processing, .compacting, .waitingForApproval:
+            return true
+        case .idle, .waitingForInput, .ended:
+            return false
+        }
+    }
+
     // MARK: - State Machine Transitions
 
     /// Check if a transition to the target phase is valid

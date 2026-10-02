@@ -198,6 +198,10 @@ struct ChatView: View {
                     .lineLimit(1)
 
                 Spacer()
+
+                if session.phase.isWorking, let startedAt = session.workStartedAt {
+                    WorkTimerText(since: startedAt)
+                }
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)

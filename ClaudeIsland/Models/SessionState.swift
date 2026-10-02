@@ -26,7 +26,18 @@ struct SessionState: Equatable, Identifiable, Sendable {
     // MARK: - State Machine
 
     /// Current phase in the session lifecycle
-    var phase: SessionPhase
+    var phase: SessionPhase {
+        didSet {
+            if phase.isWorking && !oldValue.isWorking {
+                workStartedAt = Date()
+            } else if !phase.isWorking {
+                workStartedAt = nil
+            }
+        }
+    }
+
+    /// When the current stretch of work began; nil while not working
+    var workStartedAt: Date?
 
     // MARK: - Chat History
 
