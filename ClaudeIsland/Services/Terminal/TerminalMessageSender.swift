@@ -7,6 +7,7 @@
 //  matched by tty, so no tmux setup is needed for them.
 //
 
+import AppKit
 import Foundation
 import os.log
 
@@ -25,12 +26,46 @@ actor TerminalMessageSender {
 
     // MARK: - Public API
 
-    /// Whether the session runs in a terminal we can send text to
-    nonisolated static func canSend(to session: SessionState) -> Bool {
-        guard session.tty != nil else { return false }
-        if session.isInTmux { return true }
-        guard let pid = session.pid else { return false }
-        return scriptableTerminal(forClaudePid: pid) != nil
+    /// How a typed message can reach a session
+    enum Support: Sendable {
+        /// tmux, Terminal.app or iTerm2
+        case available
+        /// Started by the Claude desktop app, which has no terminal to write to
+        case claudeDesktop
+        case unavailable
+    }
+
+    /// Runs `ps`, so call it off the main thread and cache the result
+    nonisolated static func support(for session: SessionState) -> Support {
+        guard let pid = session.pid else { return .unavailable }
+        let tree = ProcessTreeBuilder.shared.buildTree()
+
+        if session.tty != nil {
+            if session.isInTmux { return .available }
+            if scriptableTerminal(forClaudePid: pid, tree: tree) != nil { return .available }
+        }
+        return isChildOfClaudeDesktop(pid: pid, tree: tree) ? .claudeDesktop : .unavailable
+    }
+
+    /// Bring the Claude desktop app to the front
+    @MainActor
+    static func openClaudeDesktop() {
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.anthropic.claudefordesktop") else {
+            return
+        }
+        NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration())
+    }
+
+    private nonisolated static func isChildOfClaudeDesktop(pid: Int, tree: [Int: ProcessInfo]) -> Bool {
+        var current = pid
+        var depth = 0
+        while current > 1 && depth < 20 {
+            guard let info = tree[current] else { return false }
+            if info.command.contains("/Claude.app/") { return true }
+            current = info.ppid
+            depth += 1
+        }
+        return false
     }
 
     /// Send text (followed by Enter) to the session's terminal
@@ -59,7 +94,8 @@ actor TerminalMessageSender {
             return .tmux(target)
         }
 
-        guard let pid = session.pid, let terminal = Self.scriptableTerminal(forClaudePid: pid) else {
+        guard let pid = session.pid,
+              let terminal = Self.scriptableTerminal(forClaudePid: pid, tree: ProcessTreeBuilder.shared.buildTree()) else {
             return nil
         }
         let devTty = "/dev/" + tty
@@ -74,8 +110,7 @@ actor TerminalMessageSender {
         case terminalApp
     }
 
-    private nonisolated static func scriptableTerminal(forClaudePid pid: Int) -> ScriptableTerminal? {
-        let tree = ProcessTreeBuilder.shared.buildTree()
+    private nonisolated static func scriptableTerminal(forClaudePid pid: Int, tree: [Int: ProcessInfo]) -> ScriptableTerminal? {
         guard let terminalPid = ProcessTreeBuilder.shared.findTerminalPid(forProcess: pid, tree: tree),
               let command = tree[terminalPid]?.command else { return nil }
 
@@ -151,7 +186,7 @@ actor TerminalMessageSender {
             arguments: ["-e", script, "--"] + arguments
         )
         switch result {
-        case .success(let output) where output.isSuccess:
+        case .success(let output) where output.exitCode == 0:
             return true
         case .success(let output):
             Self.logger.error("AppleScript failed: \(output.stderr ?? "", privacy: .public)")
