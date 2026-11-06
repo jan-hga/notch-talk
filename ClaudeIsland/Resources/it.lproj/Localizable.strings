@@ -99,3 +99,13 @@
 "Remove folder" = "Rimuovi cartella";
 "Keep Mac Awake" = "Tieni il Mac attivo";
 "Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk ha bisogno una sola volta dei permessi di amministratore per tenere attivo il Mac a coperchio chiuso.";
+"Turn on Keep Mac Awake?" = "Attivare «Tieni il Mac attivo»?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Il Mac non andrà più in stop, nemmeno a coperchio chiuso, così Claude può continuare a lavorare.";
+"The battery keeps draining. Use it on power if you can." = "La batteria continua a scaricarsi. Se puoi, tienilo collegato alla corrente.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Un Mac chiuso che resta acceso può scaldarsi molto. Non metterlo mai in una borsa o custodia finché è attivo.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Chiudendo il coperchio lo schermo viene portato alla luminosità minima, ma potrebbe non spegnersi del tutto.";
+"The first time, macOS asks once for your administrator password." = "La prima volta macOS chiede una sola volta la password di amministratore.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Lo stop normale torna appena disattivi l'opzione o chiudi Notch Talk.";
+"Turn On" = "Attiva";
+"Cancel" = "Annulla";
+"Don't show again" = "Non mostrare più";

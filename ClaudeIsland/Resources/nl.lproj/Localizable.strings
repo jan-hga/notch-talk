@@ -99,3 +99,13 @@
 "Remove folder" = "Map verwijderen";
 "Keep Mac Awake" = "Mac wakker houden";
 "Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk heeft eenmalig beheerdersrechten nodig om de Mac wakker te houden met het deksel dicht.";
+"Turn on Keep Mac Awake?" = "‘Mac wakker houden’ inschakelen?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Je Mac gaat dan niet meer in slaap, ook niet met het deksel dicht, zodat Claude kan doorwerken.";
+"The battery keeps draining. Use it on power if you can." = "De batterij blijft leeglopen. Gebruik hem bij voorkeur aan de stroom.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Een dichtgeklapte Mac die blijft draaien kan erg heet worden. Stop hem nooit in een tas of hoes zolang dit aan staat.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Bij het dichtklappen wordt het scherm op de laagste helderheid gezet, maar het gaat mogelijk niet helemaal uit.";
+"The first time, macOS asks once for your administrator password." = "De eerste keer vraagt macOS eenmalig om je beheerderswachtwoord.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "De normale sluimerstand komt terug zodra je dit uitzet of Notch Talk afsluit.";
+"Turn On" = "Inschakelen";
+"Cancel" = "Annuleer";
+"Don't show again" = "Niet meer tonen";

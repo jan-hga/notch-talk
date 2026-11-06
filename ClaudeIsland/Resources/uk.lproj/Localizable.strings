@@ -99,3 +99,13 @@
 "Remove folder" = "Прибрати теку";
 "Keep Mac Awake" = "Не давати Mac засинати";
 "Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk одноразово потрібні права адміністратора, щоб Mac не засинав із закритою кришкою.";
+"Turn on Keep Mac Awake?" = "Увімкнути «Не давати Mac засинати»?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Mac більше не засинатиме, навіть із закритою кришкою, щоб Claude міг працювати далі.";
+"The battery keeps draining. Use it on power if you can." = "Акумулятор і далі розряджається. За можливості підключіть живлення.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Закритий Mac, що працює, може дуже нагрітися. Ніколи не кладіть його в сумку чи чохол, поки це увімкнено.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Коли ви закриваєте кришку, яскравість екрана знижується до мінімуму, але він може не вимкнутися повністю.";
+"The first time, macOS asks once for your administrator password." = "Першого разу macOS один раз попросить пароль адміністратора.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Звичайний сон повернеться, щойно ви вимкнете це або закриєте Notch Talk.";
+"Turn On" = "Увімкнути";
+"Cancel" = "Скасувати";
+"Don't show again" = "Більше не показувати";

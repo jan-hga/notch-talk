@@ -99,3 +99,13 @@
 "Remove folder" = "フォルダを削除";
 "Keep Mac Awake" = "Macをスリープさせない";
 "Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "蓋を閉じてもMacを起動したままにするため、Notch Talkに一度だけ管理者権限が必要です。";
+"Turn on Keep Mac Awake?" = "「Macをスリープさせない」をオンにしますか？";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Claudeが作業を続けられるよう、蓋を閉じてもMacはスリープしなくなります。";
+"The battery keeps draining. Use it on power if you can." = "バッテリーは減り続けます。できれば電源に接続して使ってください。";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "蓋を閉じたまま動作するMacは非常に熱くなることがあります。オンの間はバッグやケースに絶対に入れないでください。";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "蓋を閉じると画面は最低の明るさになりますが、完全には消えない場合があります。";
+"The first time, macOS asks once for your administrator password." = "初回のみ、macOSが管理者パスワードを一度だけ求めます。";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "オフにするかNotch Talkを終了すると、通常のスリープに戻ります。";
+"Turn On" = "オンにする";
+"Cancel" = "キャンセル";
+"Don't show again" = "今後表示しない";

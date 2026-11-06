@@ -99,3 +99,13 @@
 "Remove folder" = "폴더 제거";
 "Keep Mac Awake" = "Mac 깨어 있게 유지";
 "Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "덮개를 닫아도 Mac이 깨어 있도록 Notch Talk에 관리자 권한이 한 번 필요합니다.";
+"Turn on Keep Mac Awake?" = "‘Mac 깨어 있게 유지’를 켤까요?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Claude가 계속 작업할 수 있도록 덮개를 닫아도 Mac이 잠자기 상태로 전환되지 않습니다.";
+"The battery keeps draining. Use it on power if you can." = "배터리는 계속 소모됩니다. 가능하면 전원에 연결해 사용하세요.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "덮개를 닫은 채 작동하는 Mac은 매우 뜨거워질 수 있습니다. 이 기능이 켜져 있는 동안에는 가방이나 파우치에 넣지 마세요.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "덮개를 닫으면 화면이 가장 낮은 밝기로 어두워지지만 완전히 꺼지지 않을 수 있습니다.";
+"The first time, macOS asks once for your administrator password." = "처음에 한 번 macOS가 관리자 암호를 요청합니다.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "이 기능을 끄거나 Notch Talk를 종료하면 일반 잠자기 상태가 돌아옵니다.";
+"Turn On" = "켜기";
+"Cancel" = "취소";
+"Don't show again" = "다시 표시하지 않음";

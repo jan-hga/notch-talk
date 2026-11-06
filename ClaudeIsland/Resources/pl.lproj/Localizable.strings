@@ -99,3 +99,13 @@
 "Remove folder" = "Usuń folder";
 "Keep Mac Awake" = "Nie usypiaj Maca";
 "Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk jednorazowo potrzebuje uprawnień administratora, aby Mac nie usypiał po zamknięciu klapy.";
+"Turn on Keep Mac Awake?" = "Włączyć „Nie usypiaj Maca”?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Mac nie będzie już przechodził w uśpienie, nawet po zamknięciu klapy, więc Claude może dalej pracować.";
+"The battery keeps draining. Use it on power if you can." = "Bateria nadal się rozładowuje. Najlepiej korzystaj z zasilacza.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Zamknięty, działający Mac może się mocno nagrzać. Nigdy nie wkładaj go do torby ani etui, gdy ta opcja jest włączona.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Po zamknięciu klapy ekran zostaje przyciemniony do minimum, ale może nie wyłączyć się całkowicie.";
+"The first time, macOS asks once for your administrator password." = "Za pierwszym razem macOS jednorazowo poprosi o hasło administratora.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Normalne usypianie wraca, gdy tylko wyłączysz tę opcję lub zamkniesz Notch Talk.";
+"Turn On" = "Włącz";
+"Cancel" = "Anuluj";
+"Don't show again" = "Nie pokazuj ponownie";

@@ -99,3 +99,13 @@
 "Remove folder" = "Klasörü kaldır";
 "Keep Mac Awake" = "Mac'i uyanık tut";
 "Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk, kapak kapalıyken Mac'in uyanık kalması için bir kez yönetici izni gerektirir.";
+"Turn on Keep Mac Awake?" = "“Mac'i uyanık tut” açılsın mı?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Mac'iniz artık uyku moduna geçmez, kapak kapalıyken bile; böylece Claude çalışmaya devam edebilir.";
+"The battery keeps draining. Use it on power if you can." = "Pil boşalmaya devam eder. Mümkünse prize takılı kullanın.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Kapağı kapalı çalışan bir Mac çok ısınabilir. Bu açıkken onu asla çantaya veya kılıfa koymayın.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Kapağı kapattığınızda ekran en düşük parlaklığa indirilir ama tamamen kapanmayabilir.";
+"The first time, macOS asks once for your administrator password." = "İlk seferde macOS bir kez yönetici parolanızı ister.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Bunu kapattığınızda veya Notch Talk'tan çıktığınızda normal uyku geri gelir.";
+"Turn On" = "Aç";
+"Cancel" = "İptal";
+"Don't show again" = "Bir daha gösterme";

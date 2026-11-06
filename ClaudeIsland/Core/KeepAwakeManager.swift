@@ -77,9 +77,41 @@ final class KeepAwakeManager: ObservableObject {
             if isEnabled {
                 await deactivate()
             } else {
+                guard confirmWarning() else { return }
                 await activate(promptIfNeeded: true)
             }
         }
+    }
+
+    /// Explains the consequences before the setting is turned on.
+    /// Returns false if the user cancels.
+    private func confirmWarning() -> Bool {
+        guard !AppSettings.keepAwakeWarningSuppressed else { return true }
+
+        NSApp.activate(ignoringOtherApps: true)
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = L10n.tr("Turn on Keep Mac Awake?")
+        alert.informativeText = [
+            L10n.tr("Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working."),
+            "",
+            "• " + L10n.tr("The battery keeps draining. Use it on power if you can."),
+            "• " + L10n.tr("A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on."),
+            "• " + L10n.tr("The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely."),
+            "• " + L10n.tr("The first time, macOS asks once for your administrator password."),
+            "",
+            L10n.tr("Normal sleep comes back as soon as you turn this off or quit Notch Talk."),
+        ].joined(separator: "\n")
+        alert.addButton(withTitle: L10n.tr("Turn On"))
+        alert.addButton(withTitle: L10n.tr("Cancel"))
+        alert.showsSuppressionButton = true
+        alert.suppressionButton?.title = L10n.tr("Don't show again")
+
+        let confirmed = alert.runModal() == .alertFirstButtonReturn
+        if confirmed, alert.suppressionButton?.state == .on {
+            AppSettings.keepAwakeWarningSuppressed = true
+        }
+        return confirmed
     }
 
     private func activate(promptIfNeeded: Bool) async {

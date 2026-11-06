@@ -99,3 +99,13 @@
 "Remove folder" = "移除文件夹";
 "Keep Mac Awake" = "保持 Mac 唤醒";
 "Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk 需要一次管理员权限，以便合上盖子后 Mac 仍保持唤醒。";
+"Turn on Keep Mac Awake?" = "要打开“保持 Mac 唤醒”吗？";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Mac 将不再进入睡眠，即使合上盖子也不会，以便 Claude 继续工作。";
+"The battery keeps draining. Use it on power if you can." = "电池会持续耗电。尽量接上电源使用。";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "合上盖子仍在运行的 Mac 可能会变得很热。开启期间切勿放进包里或保护套中。";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "合上盖子时屏幕会调到最低亮度，但可能不会完全熄灭。";
+"The first time, macOS asks once for your administrator password." = "首次开启时，macOS 会要求输入一次管理员密码。";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "关闭此功能或退出 Notch Talk 后，正常睡眠即会恢复。";
+"Turn On" = "打开";
+"Cancel" = "取消";
+"Don't show again" = "不再显示";
