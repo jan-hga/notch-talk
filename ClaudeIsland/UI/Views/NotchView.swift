@@ -20,6 +20,7 @@ struct NotchView: View {
     @StateObject private var sessionMonitor = ClaudeSessionMonitor()
     @StateObject private var activityCoordinator = NotchActivityCoordinator.shared
     @ObservedObject private var updateManager = UpdateManager.shared
+    @ObservedObject private var keepAwake = KeepAwakeManager.shared
     @State private var previousPendingIds: Set<String> = []
     @State private var previousWaitingForInputIds: Set<String> = []
     @State private var waitingForInputTimestamps: [String: Date] = [:]  // sessionId -> when it entered waitingForInput
@@ -86,7 +87,7 @@ struct NotchView: View {
         }
 
         // Waiting for input just shows checkmark on right, no extra left indicator
-        if hasWaitingForInput {
+        if hasWaitingForInput || keepAwake.isEnabled {
             return 2 * max(0, closedNotchSize.height - 12) + 20
         }
 
@@ -187,15 +188,38 @@ struct NotchView: View {
                     }
             }
         }
+        .overlay(alignment: .top) {
+            if keepAwake.showToast && viewModel.status != .opened {
+                HStack(spacing: 6) {
+                    Image(systemName: "cup.and.saucer.fill")
+                        .font(.system(size: 11))
+                        .foregroundColor(TerminalColors.green)
+                    Text(L10n.tr("Mac stays awake, even with the lid closed"))
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.white)
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(Capsule().fill(.black))
+                .shadow(color: .black.opacity(0.5), radius: 6)
+                .padding(.top, closedNotchSize.height + 10)
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .animation(.smooth, value: keepAwake.showToast)
         .opacity(isVisible ? 1 : 0)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .preferredColorScheme(.dark)
         .onAppear {
             sessionMonitor.startMonitoring()
             // On non-notched devices, keep visible so users have a target to interact with
-            if !viewModel.hasPhysicalNotch {
+            if !viewModel.hasPhysicalNotch || keepAwake.isEnabled {
                 isVisible = true
             }
+        }
+        .onChange(of: keepAwake.isEnabled) { _, _ in handleProcessingChange() }
+        .onChange(of: keepAwake.showToast) { _, shown in
+            if shown { isVisible = true } else { handleProcessingChange() }
         }
         .onChange(of: viewModel.status) { oldStatus, newStatus in
             handleStatusChange(from: oldStatus, to: newStatus)
@@ -217,7 +241,7 @@ struct NotchView: View {
 
     /// Whether to show the expanded closed state (processing, pending permission, or waiting for input)
     private var showClosedActivity: Bool {
-        isProcessing || hasPendingPermission || hasWaitingForInput
+        isProcessing || hasPendingPermission || hasWaitingForInput || keepAwake.isEnabled
     }
 
     @ViewBuilder
@@ -290,6 +314,14 @@ struct NotchView: View {
                 } else if hasWaitingForInput {
                     // Checkmark for waiting-for-input on the right side
                     ReadyForInputIndicatorIcon(size: 14, color: TerminalColors.green)
+                        .matchedGeometryEffect(id: "spinner", in: activityNamespace, isSource: showClosedActivity)
+                        .frame(width: viewModel.status == .opened ? 20 : sideWidth)
+                        .padding(.trailing, viewModel.status == .opened ? 0 : 4)
+                } else if keepAwake.isEnabled {
+                    // Mac is being kept awake (24/7 mode)
+                    Image(systemName: "cup.and.saucer.fill")
+                        .font(.system(size: 11))
+                        .foregroundColor(TerminalColors.green)
                         .matchedGeometryEffect(id: "spinner", in: activityNamespace, isSource: showClosedActivity)
                         .frame(width: viewModel.status == .opened ? 20 : sideWidth)
                         .padding(.trailing, viewModel.status == .opened ? 0 : 4)
@@ -383,7 +415,11 @@ struct NotchView: View {
     // MARK: - Event Handlers
 
     private func handleProcessingChange() {
-        if isAnyProcessing || hasPendingPermission {
+        if keepAwake.isEnabled || keepAwake.showToast, !(isAnyProcessing || hasPendingPermission) {
+            // Keep-awake indicator stays on screen the whole time
+            if !hasWaitingForInput { activityCoordinator.hideActivity() }
+            isVisible = true
+        } else if isAnyProcessing || hasPendingPermission {
             // Show claude activity when processing or waiting for permission
             activityCoordinator.showActivity(type: .claude)
             isVisible = true
@@ -399,7 +435,7 @@ struct NotchView: View {
             // Don't hide on non-notched devices - users need a visible target
             if viewModel.status == .closed && viewModel.hasPhysicalNotch {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    if !isAnyProcessing && !hasPendingPermission && !hasWaitingForInput && viewModel.status == .closed {
+                    if !isAnyProcessing && !hasPendingPermission && !hasWaitingForInput && !keepAwake.isEnabled && !keepAwake.showToast && viewModel.status == .closed {
                         isVisible = false
                     }
                 }
@@ -419,7 +455,7 @@ struct NotchView: View {
             // Don't hide on non-notched devices - users need a visible target
             guard viewModel.hasPhysicalNotch else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-                if viewModel.status == .closed && !isAnyProcessing && !hasPendingPermission && !hasWaitingForInput && !activityCoordinator.expandingActivity.show {
+                if viewModel.status == .closed && !isAnyProcessing && !hasPendingPermission && !hasWaitingForInput && !keepAwake.isEnabled && !keepAwake.showToast && !activityCoordinator.expandingActivity.show {
                     isVisible = false
                 }
             }

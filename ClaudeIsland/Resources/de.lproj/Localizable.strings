@@ -103,7 +103,8 @@
 "Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Dein Mac schläft dann nicht mehr ein, auch nicht bei geschlossenem Display, damit Claude weiterarbeiten kann.";
 "The battery keeps draining. Use it on power if you can." = "Der Akku wird weiter entladen. Nutze den Mac am besten am Strom.";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Ein zugeklappter Mac, der weiterläuft, kann sehr heiß werden. Steck ihn nie in eine Tasche oder Hülle, solange das an ist.";
-"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Beim Zuklappen wird das Display auf die niedrigste Helligkeit gedimmt, geht aber eventuell nicht ganz aus.";
+"When you close the lid, the display turns off but the Mac keeps running." = "Beim Zuklappen geht das Display aus, aber der Mac läuft weiter.";
+"Mac stays awake, even with the lid closed" = "Mac bleibt wach, auch bei zugeklapptem Display";
 "The first time, macOS asks once for your administrator password." = "Beim ersten Mal fragt macOS einmalig nach deinem Administratorpasswort.";
 "Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Der normale Ruhezustand kommt zurück, sobald du das ausschaltest oder Notch Talk beendest.";
 "Turn On" = "Einschalten";

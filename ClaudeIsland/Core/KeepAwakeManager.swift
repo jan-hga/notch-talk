@@ -29,6 +29,8 @@ final class KeepAwakeManager: ObservableObject {
 
     /// Whether the setting is on (persisted)
     @Published private(set) var isEnabled: Bool = AppSettings.keepMacAwake
+    /// True for a few seconds after the user turns the setting on (confirmation pill)
+    @Published private(set) var showToast: Bool = false
     /// True while the admin prompt / pmset call is running
     @Published private(set) var isBusy: Bool = false
 
@@ -97,7 +99,7 @@ final class KeepAwakeManager: ObservableObject {
             "",
             "• " + L10n.tr("The battery keeps draining. Use it on power if you can."),
             "• " + L10n.tr("A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on."),
-            "• " + L10n.tr("The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely."),
+            "• " + L10n.tr("When you close the lid, the display turns off but the Mac keeps running."),
             "• " + L10n.tr("The first time, macOS asks once for your administrator password."),
             "",
             L10n.tr("Normal sleep comes back as soon as you turn this off or quit Notch Talk."),
@@ -142,6 +144,15 @@ final class KeepAwakeManager: ObservableObject {
         createIdleAssertion()
         startLidMonitoring()
         setEnabled(true)
+        if promptIfNeeded { presentToast() }
+    }
+
+    private func presentToast() {
+        showToast = true
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(5))
+            showToast = false
+        }
     }
 
     private func deactivate() async {

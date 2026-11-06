@@ -103,7 +103,8 @@
 "Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "आपका Mac अब स्लीप में नहीं जाएगा, ढक्कन बंद होने पर भी नहीं, ताकि Claude काम करता रहे।";
 "The battery keeps draining. Use it on power if you can." = "बैटरी खर्च होती रहती है। हो सके तो चार्जर लगाकर इस्तेमाल करें।";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "बंद ढक्कन के साथ चलता Mac बहुत गर्म हो सकता है। यह चालू रहते उसे कभी बैग या कवर में न रखें।";
-"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "ढक्कन बंद करने पर डिस्प्ले सबसे कम चमक पर आ जाता है, लेकिन पूरी तरह बंद नहीं भी हो सकता।";
+"When you close the lid, the display turns off but the Mac keeps running." = "ढक्कन बंद करने पर डिस्प्ले बंद हो जाता है, लेकिन Mac चलता रहता है।";
+"Mac stays awake, even with the lid closed" = "ढक्कन बंद होने पर भी Mac जागता रहेगा";
 "The first time, macOS asks once for your administrator password." = "पहली बार macOS एक बार व्यवस्थापक पासवर्ड माँगता है।";
 "Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "इसे बंद करते ही या Notch Talk से बाहर निकलते ही सामान्य स्लीप वापस आ जाती है।";
 "Turn On" = "चालू करें";
