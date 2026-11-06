@@ -97,3 +97,5 @@
 "Choose project folder" = "Виберіть теку проєкту";
 "Couldn't start Claude" = "Не вдалося запустити Claude";
 "Remove folder" = "Прибрати теку";
+"Keep Mac Awake" = "Не давати Mac засинати";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk одноразово потрібні права адміністратора, щоб Mac не засинав із закритою кришкою.";

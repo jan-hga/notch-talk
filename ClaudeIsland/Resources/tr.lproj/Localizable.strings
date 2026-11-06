@@ -97,3 +97,5 @@
 "Choose project folder" = "Proje klasörünü seç";
 "Couldn't start Claude" = "Claude başlatılamadı";
 "Remove folder" = "Klasörü kaldır";
+"Keep Mac Awake" = "Mac'i uyanık tut";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk, kapak kapalıyken Mac'in uyanık kalması için bir kez yönetici izni gerektirir.";

@@ -40,6 +40,7 @@ enum AppSettings {
         static let notificationSound = "notificationSound"
         static let claudeDirectoryName = "claudeDirectoryName"
         static let language = "appLanguage"
+        static let keepMacAwake = "keepMacAwake"
     }
 
     // MARK: - Notification Sound
@@ -71,6 +72,14 @@ enum AppSettings {
         set {
             defaults.set(newValue.trimmingCharacters(in: .whitespaces), forKey: Keys.claudeDirectoryName)
         }
+    }
+
+    // MARK: - Keep Mac Awake
+
+    /// Keep the Mac running with the lid closed and dim the display meanwhile
+    static var keepMacAwake: Bool {
+        get { defaults.bool(forKey: Keys.keepMacAwake) }
+        set { defaults.set(newValue, forKey: Keys.keepMacAwake) }
     }
 
     // MARK: - Language

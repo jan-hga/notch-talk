@@ -97,3 +97,5 @@
 "Choose project folder" = "Kies projectmap";
 "Couldn't start Claude" = "Claude kon niet worden gestart";
 "Remove folder" = "Map verwijderen";
+"Keep Mac Awake" = "Mac wakker houden";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk heeft eenmalig beheerdersrechten nodig om de Mac wakker te houden met het deksel dicht.";

@@ -97,3 +97,5 @@
 "Choose project folder" = "Projektordner wählen";
 "Couldn't start Claude" = "Claude konnte nicht gestartet werden";
 "Remove folder" = "Ordner entfernen";
+"Keep Mac Awake" = "Mac wach halten";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk braucht einmalig Administratorrechte, damit der Mac bei geschlossenem Display wach bleibt.";

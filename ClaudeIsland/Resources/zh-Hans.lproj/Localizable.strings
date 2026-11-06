@@ -97,3 +97,5 @@
 "Choose project folder" = "选择项目文件夹";
 "Couldn't start Claude" = "无法启动 Claude";
 "Remove folder" = "移除文件夹";
+"Keep Mac Awake" = "保持 Mac 唤醒";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk 需要一次管理员权限，以便合上盖子后 Mac 仍保持唤醒。";

@@ -97,3 +97,5 @@
 "Choose project folder" = "Valitse projektikansio";
 "Couldn't start Claude" = "Clauden käynnistys epäonnistui";
 "Remove folder" = "Poista kansio";
+"Keep Mac Awake" = "Pidä Mac hereillä";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk tarvitsee kerran ylläpitäjän oikeudet, jotta Mac pysyy hereillä kansi suljettuna.";

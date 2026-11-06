@@ -43,6 +43,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         HookInstaller.installIfNeeded()
+        KeepAwakeManager.shared.start()
         NSApplication.shared.setActivationPolicy(.accessory)
 
         windowManager = WindowManager()
@@ -68,6 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         BackgroundChats.shared.terminateAll()
+        KeepAwakeManager.shared.shutdown()
         updateCheckTimer?.invalidate()
         screenObserver = nil
     }

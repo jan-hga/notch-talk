@@ -17,6 +17,7 @@ struct NotchMenuView: View {
     @ObservedObject private var updateManager = UpdateManager.shared
     @ObservedObject private var screenSelector = ScreenSelector.shared
     @ObservedObject private var soundSelector = SoundSelector.shared
+    @ObservedObject private var keepAwake = KeepAwakeManager.shared
     @State private var hooksInstalled: Bool = false
     @State private var launchAtLogin: Bool = false
 
@@ -65,6 +66,15 @@ struct NotchMenuView: View {
                         print("Failed to toggle launch at login: \(error)")
                     }
                 }
+
+                MenuToggleRow(
+                    icon: "cup.and.saucer",
+                    label: L10n.tr("Keep Mac Awake"),
+                    isOn: keepAwake.isEnabled
+                ) {
+                    keepAwake.toggle()
+                }
+                .disabled(keepAwake.isBusy)
 
                 MenuToggleRow(
                     icon: "arrow.triangle.2.circlepath",

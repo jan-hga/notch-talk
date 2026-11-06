@@ -14,6 +14,7 @@
 - **Send Messages** — Type to Claude Code right from the notch (Terminal.app, iTerm2 or tmux)
 - **Chat History** — View full conversation history with markdown rendering
 - **Auto-Setup** — Hooks install automatically on first launch
+- **Keep Mac Awake** — Optional setting that keeps Claude working with the lid closed and dims the display to its lowest brightness meanwhile (asks once for an admin password)
 
 ## Requirements
 
