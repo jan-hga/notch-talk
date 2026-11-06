@@ -104,9 +104,10 @@
 "The battery keeps draining. Use it on power if you can." = "La batterie continue de se décharger. Branchez-le si possible.";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Un Mac fermé qui reste allumé peut devenir très chaud. Ne le mettez jamais dans un sac ou une housse tant que c'est activé.";
 "When you close the lid, the display turns off but the Mac keeps running." = "Quand vous fermez le capot, l'écran s'éteint mais le Mac continue de fonctionner.";
-"Mac stays awake, even with the lid closed" = "Le Mac reste éveillé, même capot fermé";
+"Mac stays awake, you can close the lid" = "Le Mac reste éveillé, vous pouvez fermer le capot";
+"Keep awake ended" = "Maintien en éveil terminé";
 "The first time, macOS asks once for your administrator password." = "La première fois, macOS demande une seule fois votre mot de passe administrateur.";
-"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "La veille normale revient dès que vous désactivez cette option ou quittez Notch Talk.";
+"Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk." = "La mise en veille normale revient dès que vous rouvrez le capot, désactivez cette option ou quittez Notch Talk.";
 "Turn On" = "Activer";
 "Cancel" = "Annuler";
 "Don't show again" = "Ne plus afficher";

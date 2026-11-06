@@ -104,9 +104,10 @@
 "The battery keeps draining. Use it on power if you can." = "बैटरी खर्च होती रहती है। हो सके तो चार्जर लगाकर इस्तेमाल करें।";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "बंद ढक्कन के साथ चलता Mac बहुत गर्म हो सकता है। यह चालू रहते उसे कभी बैग या कवर में न रखें।";
 "When you close the lid, the display turns off but the Mac keeps running." = "ढक्कन बंद करने पर डिस्प्ले बंद हो जाता है, लेकिन Mac चलता रहता है।";
-"Mac stays awake, even with the lid closed" = "ढक्कन बंद होने पर भी Mac जागता रहेगा";
+"Mac stays awake, you can close the lid" = "Mac जागता रहेगा, आप ढक्कन बंद कर सकते हैं";
+"Keep awake ended" = "जागते रखना समाप्त";
 "The first time, macOS asks once for your administrator password." = "पहली बार macOS एक बार व्यवस्थापक पासवर्ड माँगता है।";
-"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "इसे बंद करते ही या Notch Talk से बाहर निकलते ही सामान्य स्लीप वापस आ जाती है।";
+"Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk." = "ढक्कन दोबारा खोलने, इसे बंद करने या Notch Talk बंद करने पर सामान्य स्लीप लौट आती है।";
 "Turn On" = "चालू करें";
 "Cancel" = "रद्द करें";
 "Don't show again" = "फिर से न दिखाएँ";

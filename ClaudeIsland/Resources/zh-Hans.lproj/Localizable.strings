@@ -104,9 +104,10 @@
 "The battery keeps draining. Use it on power if you can." = "电池会持续耗电。尽量接上电源使用。";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "合上盖子仍在运行的 Mac 可能会变得很热。开启期间切勿放进包里或保护套中。";
 "When you close the lid, the display turns off but the Mac keeps running." = "合上盖子时显示屏会关闭，但 Mac 会继续运行。";
-"Mac stays awake, even with the lid closed" = "即使合上盖子，Mac 也会保持唤醒";
+"Mac stays awake, you can close the lid" = "Mac 保持唤醒，你可以合上盖子";
+"Keep awake ended" = "保持唤醒已结束";
 "The first time, macOS asks once for your administrator password." = "首次开启时，macOS 会要求输入一次管理员密码。";
-"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "关闭此功能或退出 Notch Talk 后，正常睡眠即会恢复。";
+"Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk." = "再次打开盖子、关闭此功能或退出 Notch Talk 后，将恢复正常睡眠。";
 "Turn On" = "打开";
 "Cancel" = "取消";
 "Don't show again" = "不再显示";

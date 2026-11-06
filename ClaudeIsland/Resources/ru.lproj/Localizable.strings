@@ -104,9 +104,10 @@
 "The battery keeps draining. Use it on power if you can." = "Аккумулятор продолжает разряжаться. По возможности подключите питание.";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Закрытый работающий Mac может сильно нагреться. Никогда не кладите его в сумку или чехол, пока это включено.";
 "When you close the lid, the display turns off but the Mac keeps running." = "При закрытии крышки дисплей выключается, но Mac продолжает работать.";
-"Mac stays awake, even with the lid closed" = "Mac не уснёт, даже с закрытой крышкой";
+"Mac stays awake, you can close the lid" = "Mac не уснёт, можно закрыть крышку";
+"Keep awake ended" = "Режим бодрствования завершён";
 "The first time, macOS asks once for your administrator password." = "В первый раз macOS однократно запросит пароль администратора.";
-"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Обычный сон вернётся, как только вы выключите эту функцию или закроете Notch Talk.";
+"Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk." = "Обычный сон вернётся, когда вы снова откроете крышку, выключите эту функцию или закроете Notch Talk.";
 "Turn On" = "Включить";
 "Cancel" = "Отмена";
 "Don't show again" = "Больше не показывать";

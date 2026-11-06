@@ -104,9 +104,10 @@
 "The battery keeps draining. Use it on power if you can." = "Batteriet fortsätter att laddas ur. Använd den helst med laddare.";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "En stängd Mac som fortsätter köra kan bli mycket varm. Lägg den aldrig i en väska eller ett fodral medan detta är på.";
 "When you close the lid, the display turns off but the Mac keeps running." = "När du stänger locket slocknar skärmen, men Macen fortsätter att köra.";
-"Mac stays awake, even with the lid closed" = "Macen förblir vaken, även med stängt lock";
+"Mac stays awake, you can close the lid" = "Macen förblir vaken, du kan stänga locket";
+"Keep awake ended" = "Håll vaken avslutad";
 "The first time, macOS asks once for your administrator password." = "Första gången frågar macOS en gång efter ditt administratörslösenord.";
-"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Vanlig vila kommer tillbaka så fort du stänger av detta eller avslutar Notch Talk.";
+"Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk." = "Normalt viloläge återkommer när du öppnar locket igen, stänger av detta eller avslutar Notch Talk.";
 "Turn On" = "Slå på";
 "Cancel" = "Avbryt";
 "Don't show again" = "Visa inte igen";

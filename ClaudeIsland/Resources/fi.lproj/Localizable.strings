@@ -104,9 +104,10 @@
 "The battery keeps draining. Use it on power if you can." = "Akku tyhjenee edelleen. Käytä mieluiten verkkovirralla.";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Suljettu, käynnissä oleva Mac voi kuumentua paljon. Älä koskaan laita sitä laukkuun tai suojakoteloon, kun tämä on päällä.";
 "When you close the lid, the display turns off but the Mac keeps running." = "Kun suljet kannen, näyttö sammuu, mutta Mac jatkaa toimintaa.";
-"Mac stays awake, even with the lid closed" = "Mac pysyy hereillä, vaikka kansi on kiinni";
+"Mac stays awake, you can close the lid" = "Mac pysyy hereillä, voit sulkea kannen";
+"Keep awake ended" = "Hereillä pito päättyi";
 "The first time, macOS asks once for your administrator password." = "Ensimmäisellä kerralla macOS kysyy kerran ylläpitäjän salasanaa.";
-"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Tavallinen lepotila palaa heti, kun poistat tämän käytöstä tai lopetat Notch Talkin.";
+"Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk." = "Normaali lepotila palaa, kun avaat kannen uudelleen, kytket tämän pois tai suljet Notch Talkin.";
 "Turn On" = "Ota käyttöön";
 "Cancel" = "Kumoa";
 "Don't show again" = "Älä näytä uudelleen";

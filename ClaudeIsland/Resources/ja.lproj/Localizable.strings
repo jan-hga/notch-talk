@@ -104,9 +104,10 @@
 "The battery keeps draining. Use it on power if you can." = "バッテリーは減り続けます。できれば電源に接続して使ってください。";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "蓋を閉じたまま動作するMacは非常に熱くなることがあります。オンの間はバッグやケースに絶対に入れないでください。";
 "When you close the lid, the display turns off but the Mac keeps running." = "蓋を閉じるとディスプレイは消えますが、Macは動き続けます。";
-"Mac stays awake, even with the lid closed" = "蓋を閉じても Mac はスリープしません";
+"Mac stays awake, you can close the lid" = "Mac は起きたままです。蓋を閉じて大丈夫です";
+"Keep awake ended" = "スリープ防止を終了しました";
 "The first time, macOS asks once for your administrator password." = "初回のみ、macOSが管理者パスワードを一度だけ求めます。";
-"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "オフにするかNotch Talkを終了すると、通常のスリープに戻ります。";
+"Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk." = "蓋を再び開くか、オフにするか、Notch Talk を終了すると通常のスリープに戻ります。";
 "Turn On" = "オンにする";
 "Cancel" = "キャンセル";
 "Don't show again" = "今後表示しない";

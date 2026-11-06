@@ -29,8 +29,8 @@ final class KeepAwakeManager: ObservableObject {
 
     /// Whether the setting is on (persisted)
     @Published private(set) var isEnabled: Bool = AppSettings.keepMacAwake
-    /// True for a few seconds after the user turns the setting on (confirmation pill)
-    @Published private(set) var showToast: Bool = false
+    /// True for a few seconds after keeping awake ended on its own (lid reopened)
+    @Published private(set) var showEnded: Bool = false
     /// True while the admin prompt / pmset call is running
     @Published private(set) var isBusy: Bool = false
 
@@ -41,6 +41,8 @@ final class KeepAwakeManager: ObservableObject {
     private var idleAssertion: IOPMAssertionID = 0
     private var lidTimer: Timer?
     private var lidWasClosed = false
+    /// The lid was closed at some point while keeping awake; reopening it ends the session
+    private var sawLidClosed = false
     private var savedBrightness: Float?
 
     private init() {}
@@ -102,7 +104,7 @@ final class KeepAwakeManager: ObservableObject {
             "• " + L10n.tr("When you close the lid, the display turns off but the Mac keeps running."),
             "• " + L10n.tr("The first time, macOS asks once for your administrator password."),
             "",
-            L10n.tr("Normal sleep comes back as soon as you turn this off or quit Notch Talk."),
+            L10n.tr("Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk."),
         ].joined(separator: "\n")
         alert.addButton(withTitle: L10n.tr("Turn On"))
         alert.addButton(withTitle: L10n.tr("Cancel"))
@@ -144,14 +146,14 @@ final class KeepAwakeManager: ObservableObject {
         createIdleAssertion()
         startLidMonitoring()
         setEnabled(true)
-        if promptIfNeeded { presentToast() }
     }
 
-    private func presentToast() {
-        showToast = true
+    private func presentEnded() {
+        showEnded = true
+        NSSound(named: AppSettings.notificationSound.soundName ?? "Glass")?.play()
         Task { @MainActor in
             try? await Task.sleep(for: .seconds(5))
-            showToast = false
+            showEnded = false
         }
     }
 
@@ -276,6 +278,7 @@ final class KeepAwakeManager: ObservableObject {
     private func startLidMonitoring() {
         guard lidTimer == nil else { return }
         lidWasClosed = Self.isLidClosed()
+        sawLidClosed = lidWasClosed
         if lidWasClosed { dimDisplay() }
         lidTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in self?.checkLid() }
@@ -286,6 +289,7 @@ final class KeepAwakeManager: ObservableObject {
         lidTimer?.invalidate()
         lidTimer = nil
         lidWasClosed = false
+        sawLidClosed = false
     }
 
     private func checkLid() {
@@ -293,9 +297,17 @@ final class KeepAwakeManager: ObservableObject {
         guard closed != lidWasClosed else { return }
         lidWasClosed = closed
         if closed {
+            sawLidClosed = true
             dimDisplay()
         } else {
             restoreBrightness()
+            // One-shot: once the lid has been closed and opened again, normal sleep returns
+            if sawLidClosed && isEnabled && !isBusy {
+                Task {
+                    await deactivate()
+                    presentEnded()
+                }
+            }
         }
     }
 

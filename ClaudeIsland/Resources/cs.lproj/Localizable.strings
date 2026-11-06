@@ -104,9 +104,10 @@
 "The battery keeps draining. Use it on power if you can." = "Baterie se dál vybíjí. Pokud můžeš, nech ho připojený k napájení.";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Zavřený Mac, který dál běží, se může hodně zahřát. Nikdy ho nedávej do tašky nebo obalu, dokud je tohle zapnuté.";
 "When you close the lid, the display turns off but the Mac keeps running." = "Po zavření víka se displej vypne, ale Mac běží dál.";
-"Mac stays awake, even with the lid closed" = "Mac zůstane vzhůru, i se zavřeným víkem";
+"Mac stays awake, you can close the lid" = "Mac zůstává vzhůru, můžeš zavřít víko";
+"Keep awake ended" = "Udržování vzhůru skončilo";
 "The first time, macOS asks once for your administrator password." = "Poprvé si macOS jednou vyžádá heslo správce.";
-"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Normální spánek se vrátí, jakmile tohle vypneš nebo ukončíš Notch Talk.";
+"Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk." = "Běžný spánek se vrátí, jakmile víko znovu otevřeš, vypneš to nebo ukončíš Notch Talk.";
 "Turn On" = "Zapnout";
 "Cancel" = "Zrušit";
 "Don't show again" = "Znovu nezobrazovat";

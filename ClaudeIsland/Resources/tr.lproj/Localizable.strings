@@ -104,9 +104,10 @@
 "The battery keeps draining. Use it on power if you can." = "Pil boşalmaya devam eder. Mümkünse prize takılı kullanın.";
 "A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Kapağı kapalı çalışan bir Mac çok ısınabilir. Bu açıkken onu asla çantaya veya kılıfa koymayın.";
 "When you close the lid, the display turns off but the Mac keeps running." = "Kapağı kapattığında ekran kapanır ama Mac çalışmaya devam eder.";
-"Mac stays awake, even with the lid closed" = "Mac, kapak kapalıyken bile uyanık kalır";
+"Mac stays awake, you can close the lid" = "Mac uyanık kalır, kapağı kapatabilirsin";
+"Keep awake ended" = "Uyanık tutma sona erdi";
 "The first time, macOS asks once for your administrator password." = "İlk seferde macOS bir kez yönetici parolanızı ister.";
-"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Bunu kapattığınızda veya Notch Talk'tan çıktığınızda normal uyku geri gelir.";
+"Normal sleep comes back when you open the lid again, turn this off or quit Notch Talk." = "Kapağı tekrar açtığında, bunu kapattığında veya Notch Talk'tan çıktığında normal uyku geri gelir.";
 "Turn On" = "Aç";
 "Cancel" = "İptal";
 "Don't show again" = "Bir daha gösterme";
