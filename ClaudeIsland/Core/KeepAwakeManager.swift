@@ -107,7 +107,7 @@ final class KeepAwakeManager: ObservableObject {
         alert.showsSuppressionButton = true
         alert.suppressionButton?.title = L10n.tr("Don't show again")
 
-        let confirmed = alert.runModal() == .alertFirstButtonReturn
+        let confirmed = NotchModalGuard.run(alert) == .alertFirstButtonReturn
         if confirmed, alert.suppressionButton?.state == .on {
             AppSettings.keepAwakeWarningSuppressed = true
         }
@@ -223,9 +223,11 @@ final class KeepAwakeManager: ObservableObject {
         let succeeded: Bool = DispatchQueue.main.sync {
             MainActor.assumeIsolated {
                 NSApp.activate(ignoringOtherApps: true)
-                var error: NSDictionary?
-                let result = NSAppleScript(source: source)?.executeAndReturnError(&error)
-                return result != nil && error == nil
+                return NotchModalGuard.runModal { () -> Bool in
+                    var error: NSDictionary?
+                    let result = NSAppleScript(source: source)?.executeAndReturnError(&error)
+                    return result != nil && error == nil
+                }
             }
         }
         return succeeded
