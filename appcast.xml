@@ -3,6 +3,14 @@
     <channel>
         <title>Notch Talk</title>
         <item>
+            <title>1.5.1</title>
+            <pubDate>Fri, 06 Nov 2026 20:53:47 +0100</pubDate>
+            <sparkle:version>11</sparkle:version>
+            <sparkle:shortVersionString>1.5.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/jan-hga/notch-talk/releases/download/v1.5.1/NotchTalk-1.5.1.dmg" sparkle:edSignature="4qBss/oMzzROy8QxPXFv0EsJNKatRYsEYyzWxb4TKRodWwXblCNKEn6VeT6TmOt7nV/29vcuLYD/mYcvv1KQBg==" length="4533330" type="application/octet-stream"/>
+        </item>
+        <item>
             <title>1.5.0</title>
             <pubDate>Fri, 06 Nov 2026 20:33:55 +0100</pubDate>
             <sparkle:version>10</sparkle:version>
