@@ -11,10 +11,17 @@ ARCHIVE="$OUT/NotchTalk.xcarchive"
 
 rm -rf "$OUT" && mkdir -p "$OUT"
 
+# Optional: authenticate with an App Store Connect API key instead of the
+# Apple account signed in to Xcode (ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH).
+AUTH=()
+if [ -n "${ASC_KEY_ID:-}" ] && [ -n "${ASC_ISSUER_ID:-}" ] && [ -n "${ASC_KEY_PATH:-}" ]; then
+  AUTH=(-authenticationKeyPath "$ASC_KEY_PATH" -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID")
+fi
+
 echo "== Archive"
 xcodebuild -project "$ROOT/ClaudeIsland.xcodeproj" -scheme ClaudeIsland -configuration Release \
   -archivePath "$ARCHIVE" -derivedDataPath "$OUT/derived" \
-  DEVELOPMENT_TEAM="$TEAM_ID" CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates archive | tail -1
+  DEVELOPMENT_TEAM="$TEAM_ID" CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates ${AUTH[@]+"${AUTH[@]}"} archive | tail -1
 
 cat > "$OUT/upload.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -29,11 +36,11 @@ PLIST
 
 echo "== Upload for notarization"
 xcodebuild -exportArchive -archivePath "$ARCHIVE" -exportPath "$OUT/upload" \
-  -exportOptionsPlist "$OUT/upload.plist" -allowProvisioningUpdates | tail -1
+  -exportOptionsPlist "$OUT/upload.plist" -allowProvisioningUpdates ${AUTH[@]+"${AUTH[@]}"} | tail -1
 
 echo "== Wait for notarization"
 for i in $(seq 1 60); do
-  if xcodebuild -exportNotarizedApp -archivePath "$ARCHIVE" -exportPath "$OUT/app" >/dev/null 2>&1; then
+  if xcodebuild -exportNotarizedApp -archivePath "$ARCHIVE" -exportPath "$OUT/app" ${AUTH[@]+"${AUTH[@]}"} >/dev/null 2>&1; then
     break
   fi
   [ "$i" = 60 ] && { echo "Notarization did not finish in time"; exit 1; }
