@@ -55,9 +55,9 @@ fi
 echo "=== 4/4 Appcast on gh-pages"
 PAGES="$OUT/gh-pages"
 rm -rf "$PAGES"
-git -C "$ROOT" fetch origin gh-pages
+git -C "$ROOT" fetch "https://github.com/$REPO.git" gh-pages:refs/remotes/pages/gh-pages --force
 git -C "$ROOT" worktree prune
-git -C "$ROOT" worktree add --force "$PAGES" origin/gh-pages >/dev/null
+git -C "$ROOT" worktree add --force --detach "$PAGES" refs/remotes/pages/gh-pages >/dev/null
 trap 'git -C "$ROOT" worktree remove --force "$PAGES" >/dev/null 2>&1 || true' EXIT
 
 APPCAST="$PAGES/appcast.xml"
@@ -87,7 +87,7 @@ ITEM
 
   git -C "$PAGES" add appcast.xml
   git -C "$PAGES" commit -m "Appcast for Notch Talk $VERSION" >/dev/null
-  git -C "$PAGES" push origin HEAD:gh-pages
+  git -C "$PAGES" push "https://github.com/$REPO.git" HEAD:gh-pages
 fi
 
 echo ""
