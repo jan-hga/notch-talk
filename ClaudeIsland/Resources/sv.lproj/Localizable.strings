@@ -97,3 +97,15 @@
 "Choose project folder" = "Välj projektmapp";
 "Couldn't start Claude" = "Det gick inte att starta Claude";
 "Remove folder" = "Ta bort mapp";
+"Keep Mac Awake" = "Håll Mac vaken";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk behöver administratörsbehörighet en gång så att Mac kan vara vaken med locket stängt.";
+"Turn on Keep Mac Awake?" = "Slå på ”Håll Mac vaken”?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Din Mac går inte längre i vila, inte ens med locket stängt, så att Claude kan fortsätta arbeta.";
+"The battery keeps draining. Use it on power if you can." = "Batteriet fortsätter att laddas ur. Använd den helst med laddare.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "En stängd Mac som fortsätter köra kan bli mycket varm. Lägg den aldrig i en väska eller ett fodral medan detta är på.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Skärmen dämpas till lägsta ljusstyrka när du stänger locket, men den kanske inte släcks helt.";
+"The first time, macOS asks once for your administrator password." = "Första gången frågar macOS en gång efter ditt administratörslösenord.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Vanlig vila kommer tillbaka så fort du stänger av detta eller avslutar Notch Talk.";
+"Turn On" = "Slå på";
+"Cancel" = "Avbryt";
+"Don't show again" = "Visa inte igen";

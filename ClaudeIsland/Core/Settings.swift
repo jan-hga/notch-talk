@@ -40,6 +40,8 @@ enum AppSettings {
         static let notificationSound = "notificationSound"
         static let claudeDirectoryName = "claudeDirectoryName"
         static let language = "appLanguage"
+        static let keepMacAwake = "keepMacAwake"
+        static let keepAwakeWarningSuppressed = "keepAwakeWarningSuppressed"
     }
 
     // MARK: - Notification Sound
@@ -71,6 +73,20 @@ enum AppSettings {
         set {
             defaults.set(newValue.trimmingCharacters(in: .whitespaces), forKey: Keys.claudeDirectoryName)
         }
+    }
+
+    // MARK: - Keep Mac Awake
+
+    /// Keep the Mac running with the lid closed and dim the display meanwhile
+    static var keepMacAwake: Bool {
+        get { defaults.bool(forKey: Keys.keepMacAwake) }
+        set { defaults.set(newValue, forKey: Keys.keepMacAwake) }
+    }
+
+    /// The user ticked "Don't show again" on the Keep Mac Awake warning
+    static var keepAwakeWarningSuppressed: Bool {
+        get { defaults.bool(forKey: Keys.keepAwakeWarningSuppressed) }
+        set { defaults.set(newValue, forKey: Keys.keepAwakeWarningSuppressed) }
     }
 
     // MARK: - Language

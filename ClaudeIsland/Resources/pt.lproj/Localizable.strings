@@ -97,3 +97,15 @@
 "Choose project folder" = "Escolher pasta do projeto";
 "Couldn't start Claude" = "Não foi possível iniciar o Claude";
 "Remove folder" = "Remover pasta";
+"Keep Mac Awake" = "Manter o Mac ativo";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "O Notch Talk precisa de permissões de administrador uma única vez para manter o Mac ativo com a tampa fechada.";
+"Turn on Keep Mac Awake?" = "Ativar «Manter o Mac ativo»?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "O Mac deixa de entrar em repouso, mesmo com a tampa fechada, para que o Claude possa continuar a trabalhar.";
+"The battery keeps draining. Use it on power if you can." = "A bateria continua a descarregar. Se possível, use-o ligado à corrente.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Um Mac fechado que continua a funcionar pode ficar muito quente. Nunca o coloque numa mochila ou capa enquanto isto estiver ativo.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Ao fechar a tampa, o ecrã é reduzido ao brilho mínimo, mas pode não desligar por completo.";
+"The first time, macOS asks once for your administrator password." = "Na primeira vez, o macOS pede uma única vez a sua palavra-passe de administrador.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "O repouso normal volta assim que desativar isto ou sair do Notch Talk.";
+"Turn On" = "Ativar";
+"Cancel" = "Cancelar";
+"Don't show again" = "Não mostrar novamente";

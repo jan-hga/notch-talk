@@ -97,3 +97,15 @@
 "Choose project folder" = "Vyberte složku projektu";
 "Couldn't start Claude" = "Claude se nepodařilo spustit";
 "Remove folder" = "Odebrat složku";
+"Keep Mac Awake" = "Nenechat Mac usnout";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk jednou potřebuje práva správce, aby Mac zůstal vzhůru i se zavřeným víkem.";
+"Turn on Keep Mac Awake?" = "Zapnout „Nenechat Mac usnout“?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Mac už nebude přecházet do režimu spánku, ani se zavřeným víkem, aby Claude mohl dál pracovat.";
+"The battery keeps draining. Use it on power if you can." = "Baterie se dál vybíjí. Pokud můžeš, nech ho připojený k napájení.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Zavřený Mac, který dál běží, se může hodně zahřát. Nikdy ho nedávej do tašky nebo obalu, dokud je tohle zapnuté.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Po zavření víka se displej ztlumí na nejnižší jas, ale nemusí úplně zhasnout.";
+"The first time, macOS asks once for your administrator password." = "Poprvé si macOS jednou vyžádá heslo správce.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Normální spánek se vrátí, jakmile tohle vypneš nebo ukončíš Notch Talk.";
+"Turn On" = "Zapnout";
+"Cancel" = "Zrušit";
+"Don't show again" = "Znovu nezobrazovat";

@@ -97,3 +97,15 @@
 "Choose project folder" = "Valitse projektikansio";
 "Couldn't start Claude" = "Clauden käynnistys epäonnistui";
 "Remove folder" = "Poista kansio";
+"Keep Mac Awake" = "Pidä Mac hereillä";
+"Notch Talk needs administrator rights once so the Mac can stay awake with the lid closed." = "Notch Talk tarvitsee kerran ylläpitäjän oikeudet, jotta Mac pysyy hereillä kansi suljettuna.";
+"Turn on Keep Mac Awake?" = "Otetaanko ”Pidä Mac hereillä” käyttöön?";
+"Your Mac will no longer sleep, not even with the lid closed, so Claude can keep working." = "Mac ei enää siirry lepoon, ei edes kansi suljettuna, jotta Claude voi jatkaa työtä.";
+"The battery keeps draining. Use it on power if you can." = "Akku tyhjenee edelleen. Käytä mieluiten verkkovirralla.";
+"A closed Mac that keeps running can get very hot. Never put it in a bag or sleeve while this is on." = "Suljettu, käynnissä oleva Mac voi kuumentua paljon. Älä koskaan laita sitä laukkuun tai suojakoteloon, kun tämä on päällä.";
+"The display is dimmed to its lowest brightness when you close the lid, but it may not turn off completely." = "Näyttö himmennetään pienimpään kirkkauteen, kun suljet kannen, mutta se ei välttämättä sammu kokonaan.";
+"The first time, macOS asks once for your administrator password." = "Ensimmäisellä kerralla macOS kysyy kerran ylläpitäjän salasanaa.";
+"Normal sleep comes back as soon as you turn this off or quit Notch Talk." = "Tavallinen lepotila palaa heti, kun poistat tämän käytöstä tai lopetat Notch Talkin.";
+"Turn On" = "Ota käyttöön";
+"Cancel" = "Kumoa";
+"Don't show again" = "Älä näytä uudelleen";
